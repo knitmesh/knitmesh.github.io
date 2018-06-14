@@ -144,7 +144,7 @@ HTML 文件中有标签并不意味着这些标签就能立刻被绘制到屏幕
 
 ![](/img/in-post/post-eleme-pwa/nextTick-&-Load.png)
 
-当当！首次渲染瞬间就被提前了。如果你熟悉浏览器的**事件循环模型（event loop）**的话，这招 Hack 其实是通过 setTimeout 的回调把 DOM 操作放到了事件循环的任务队列中以避免它在当前循环执行，这样浏览器就得以在主线程空闲时喘息一下（更新一下渲染）了。如果你想亲手试试 MMPWA 的话，你可以访问 [github.com/Huxpro/mmpwa](https://github.com/Huxpro/mmpwa) 或 [huangxuan.me/mmpwa/](https://huangxuan.me/mmpwa) 访问代码与 Demo。我把 UI 设计为了 A/B Test 的形式并改为渲染 5000 个列表项来让效果更夸张一些。
+当当！首次渲染瞬间就被提前了。如果你熟悉浏览器的**事件循环模型（event loop）**的话，这招 Hack 其实是通过 setTimeout 的回调把 DOM 操作放到了事件循环的任务队列中以避免它在当前循环执行，这样浏览器就得以在主线程空闲时喘息一下（更新一下渲染）了。如果你想亲手试试 MMPWA 的话，你可以访问 [github.com/knitmesh/mmpwa](https://github.com/knitmesh/mmpwa) 或 [huangxuan.me/mmpwa/](https://jingh.top/mmpwa) 访问代码与 Demo。我把 UI 设计为了 A/B Test 的形式并改为渲染 5000 个列表项来让效果更夸张一些。
 
 回到饿了么 PWA 上，我们同样试着把 `new Vue()` 放到了 `setTimeout` 中。果然，黑魔法再次显灵，骨架屏在每次跳转后都能立刻被渲染。这时的 Profile 看起来是这样的：
 

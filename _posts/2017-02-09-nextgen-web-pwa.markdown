@@ -427,7 +427,7 @@ PWA 作为一个涵盖性术语，与过往的这些或多或少通过私有平�
 
 [28]: https://infrequently.org/2015/06/progressive-apps-escaping-tabs-without-losing-our-soul/ "Progressive Web Apps: Escaping Tabs Without Losing Our Soul"
 
-[29]: https://github.com/Huxpro/sw-101-gdgdf
+[29]: https://github.com/knitmesh/sw-101-gdgdf
 
 [30]: developers.google.com/web/updates/2015/12/background-sync "Background Sync - Google Developers"
 
@@ -504,14 +504,14 @@ PWA 作为一个涵盖性术语，与过往的这些或多或少通过私有平�
 [i4]: https://twitter.com/adityapunjani
 
 
-[q37]: https://huangxuan.me/pwa-qcon2016/#/37 "PWA@QCon2016 #37"
+[q37]: https://jingh.top/pwa-qcon2016/#/37 "PWA@QCon2016 #37"
 
-[q17]: https://huangxuan.me/pwa-qcon2016/#/17 "PWA@QCon2016 #17"
+[q17]: https://jingh.top/pwa-qcon2016/#/17 "PWA@QCon2016 #17"
 
-[q97]: https://huangxuan.me/pwa-qcon2016/#/99 "PWA@QCon2016 #97"
+[q97]: https://jingh.top/pwa-qcon2016/#/99 "PWA@QCon2016 #97"
 
-[s12]: https://huangxuan.me/sw-101-gdgdf/#/12 "SW-101@DevFest #12"
+[s12]: https://jingh.top/sw-101-gdgdf/#/12 "SW-101@DevFest #12"
 
-[s13]: https://huangxuan.me/sw-101-gdgdf/#/13 "SW-101@DevFest #13"
+[s13]: https://jingh.top/sw-101-gdgdf/#/13 "SW-101@DevFest #13"
 
-[b0]: https://huangxuan.me/2016/11/20/sw-101-gdgdf/
+[b0]: https://jingh.top/2016/11/20/sw-101-gdgdf/
