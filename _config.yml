@@ -17,7 +17,7 @@ weibo_username:     往事并不堪回首
 zhihu_username:     jingh
 github_username:    knitmesh
 twitter_username:   jingh
-#facebook_username:  huxpro
+#facebook_username:  jingh
 #linkedin_username:  firstname-lastname-idxxxx
 
 
@@ -68,7 +68,7 @@ ga_domain: jingh.top
 
 # Sidebar settings
 sidebar: true                           # whether or not using Sidebar.
-sidebar-about-description: "求知若饥 虚心若愚"
+sidebar-about-description: "身为未来海贼王的伙伴，你不要露出那种没出息的表情。"
 sidebar-avatar: /img/avatar-jing.jpg      # use absolute URL, seeing it's used in both `/` and `/about/`
 
 
