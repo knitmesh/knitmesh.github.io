@@ -9,6 +9,7 @@ catalog: true
 tags:
     - 读书笔记
     - Python
+    - 数据结构
 ---
 
 > 本书的原文原址[intermediatePython](http://book.pythontips.com)

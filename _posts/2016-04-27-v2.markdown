@@ -1,8 +1,8 @@
 ---
 layout:     post
-title:      "「 Intermediate Python 」 Map，Filter 和 Reduce"
+title:      "「 Intermediate Python 」 "
 subtitle:   " \"它是一本开脑洞的书。无论你是Python初学者，还是Python高手，它显现给你的永远是Python里最美好的事物。\""
-date:       2016-04-05 12:00:00
+date:       2016-04-24 12:00:00
 author:     "Jingh"
 header-img: "img/in-post/post-Intermediate/intermediatePython-01.jpg"
 catalog: true
