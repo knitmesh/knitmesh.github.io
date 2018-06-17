@@ -234,6 +234,14 @@ body, html {
 	background-size: 22px;
 }
 
+.i-mysql:before {
+	content: "";
+	display: block;
+	width: 40px;
+	height: 40px;
+	background: url("../images/logo-mysql.svg") 50% 50% no-repeat;
+	background-size: 22px;
+}
 
 /******* Hux Branch *****/
 

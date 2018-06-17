@@ -1,7 +1,7 @@
 # Site settings
 title: Jingh Blog
 SEOTitle: Jingh Blog
-header-img: img/home-bg.jpg
+header-img: img/saturn.jpg
 email: jingh.lib@gmail.com
 description: "openstack | 李景慧，python & Mobile Lover，Software Engineer，UX Designer | 这里是 jingh 的个人博客，与你一起发现更大的世界。"
 keyword: "景慧, 李景慧, , 景惠, jingh, knitmesh, 4167555, 景慧的博客, Jingh Blog, 博客, 个人网站, 互联网, Web, JavaScript, python, java, openstack, 设计"
@@ -13,8 +13,8 @@ future: true
 
 # SNS settings
 RSS: false
-weibo_username:     往事并不堪回首
-zhihu_username:     jingh
+weibo_username:     207484555
+zhihu_username:     pluto-hades
 github_username:    knitmesh
 twitter_username:   jingh
 #facebook_username:  jingh
@@ -68,8 +68,14 @@ ga_domain: jingh.top
 
 # Sidebar settings
 sidebar: true                           # whether or not using Sidebar.
-sidebar-about-description: "身为未来海贼王的伙伴，你不要露出那种没出息的表情。"
-sidebar-avatar: /img/avatar-jing.jpg      # use absolute URL, seeing it's used in both `/` and `/about/`
+sidebar-about-description: "今日乐，不可忘，乐未央。<br>
+
+                            为乐常苦迟，<br>
+
+                            岁月逝，忽若飞，<br>
+
+                            何为自苦，使我心悲。"
+sidebar-avatar: /img/jingh-master.jpg     # use absolute URL, seeing it's used in both `/` and `/about/`
 
 
 
