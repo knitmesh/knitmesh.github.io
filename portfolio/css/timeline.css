@@ -181,6 +181,60 @@ body, html {
 	background-size: 22px;
 }
 
+.i-python:before {
+	content: "";
+	display: block;
+	width: 40px;
+	height: 40px;
+	background: url("../images/logo-python.png") 50% 50% no-repeat;
+	background-size: 22px;
+}
+.i-rabbitmq:before {
+	content: "";
+	display: block;
+	width: 40px;
+	height: 40px;
+	background: url("../images/logo-rabbitmq.jpg") 50% 50% no-repeat;
+	background-size: 22px;
+}
+
+
+.i-openstack:before {
+	content: "";
+	display: block;
+	width: 40px;
+	height: 40px;
+	background: url("../images/logo-openstack.png") 50% 50% no-repeat;
+	background-size: 22px;
+}
+.i-openstack-vertical:before {
+	content: "";
+	display: block;
+	width: 40px;
+	height: 40px;
+	background: url("../images/Openstack-vertical-small.png") 50% 50% no-repeat;
+	background-size: 30px;
+}
+
+.i-java:before {
+	content: "";
+	display: block;
+	width: 40px;
+	height: 40px;
+	background: url("../images/logo-java.png") 50% 50% no-repeat;
+	background-size: 30px;
+}
+
+.i-redis:before {
+	content: "";
+	display: block;
+	width: 40px;
+	height: 40px;
+	background: url("../images/logo-redis.png") 50% 50% no-repeat;
+	background-size: 30px;
+}
+
+
 /******* Hux Branch *****/
 
 /* navbar - dark mode */
