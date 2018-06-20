@@ -1,7 +1,7 @@
 > 写写代码，做做设计，  
 > 离开世界之前，一切都是过程。
 
-Hey，我是Jingh，一个软件工程师。 主攻python后端和Openstack， 曾做过三年Java，多出没于[博客](http://blog.jingh.top/)、[微博](weibo.com/207484555)、[Twitter](https://twitter.com/jingh/)、[Github](http://github.com/knitmesh)、[Medium](https://medium.com/@Jingh) 等地带，绝招尚在开发中。
+Hey，我是Jingh，一个软件工程师。 主攻python后端和Openstack， 曾做过三年Java，多出没于[博客](https://www.jingh.top/)、[微博](https://weibo.com/207484555)、[Twitter](https://twitter.com/jingh_lib/)、[Github](http://github.com/knitmesh)、[Medium](https://medium.com/@jingh_lib) 等地带，绝招尚在开发中。
 
 
 一些项目经验和开源软件项目，👉 戳 [Portfolio](/portfolio)、[Github](http://github.com/knitmesh)。 
