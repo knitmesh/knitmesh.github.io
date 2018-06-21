@@ -191,22 +191,22 @@ _notify_about_instance_usage
 * port 创建成功后的 dhcp 相关操作（参考  https://blog.csdn.net/gj19890923/article/details/51558598 ）：
 * 1.创建VM时，nova-compute与neutron的plugin交互，在neutron的数据库中创建VM所需的port信息。
 * 2.neutron数据库中的port信息创建完成后，通知neutron-dhcp-agent去执行port_create_end函数。该函数将数据库中的port中的ip和mac信息加载到dnsmasq所需的配置文件中(包括host和addn_hosts文件)。
-        ```
-            [root@nova 43c0e274-28e3-482e-a32b-d783980fc3ed]# cat addn_hosts
-            1.1.1.1 host-1-1-1-1.openstacklocal host-1-1-1-1
-            1.1.1.2 host-1-1-1-2.openstacklocal host-1-1-1-2
-            1.1.1.10 host-1-1-1-10.openstacklocal host-1-1-1-10
-            
-            [root@nova 43c0e274-28e3-482e-a32b-d783980fc3ed]# cat host
-            fa:16:3e:d1:d7:72,host-1-1-1-1.openstacklocal,1.1.1.1
-            fa:16:3e:da:42:50,host-1-1-1-2.openstacklocal,1.1.1.2
-            fa:16:3e:3c:a3:3e,host-1-1-1-10.openstacklocal,1.1.1.10
-            
-            [root@nova 43c0e274-28e3-482e-a32b-d783980fc3ed]# cat leases
-            1464599134 fa:16:3e:3c:a3:3e 1.1.1.10 host-1-1-1-10 01:fa:16:3e:3c:a3:3e
-            1464598886 fa:16:3e:da:42:50 1.1.1.2 host-1-1-1-2 *
-            1464598886 fa:16:3e:d1:d7:72 1.1.1.1 host-1-1-1-1 *
-        ```
+```
+    [root@nova 43c0e274-28e3-482e-a32b-d783980fc3ed]# cat addn_hosts
+    1.1.1.1 host-1-1-1-1.openstacklocal host-1-1-1-1
+    1.1.1.2 host-1-1-1-2.openstacklocal host-1-1-1-2
+    1.1.1.10 host-1-1-1-10.openstacklocal host-1-1-1-10
+    
+    [root@nova 43c0e274-28e3-482e-a32b-d783980fc3ed]# cat host
+    fa:16:3e:d1:d7:72,host-1-1-1-1.openstacklocal,1.1.1.1
+    fa:16:3e:da:42:50,host-1-1-1-2.openstacklocal,1.1.1.2
+    fa:16:3e:3c:a3:3e,host-1-1-1-10.openstacklocal,1.1.1.10
+    
+    [root@nova 43c0e274-28e3-482e-a32b-d783980fc3ed]# cat leases
+    1464599134 fa:16:3e:3c:a3:3e 1.1.1.10 host-1-1-1-10 01:fa:16:3e:3c:a3:3e
+    1464598886 fa:16:3e:da:42:50 1.1.1.2 host-1-1-1-2 *
+    1464598886 fa:16:3e:d1:d7:72 1.1.1.1 host-1-1-1-1 *
+```
 * 3.在VM启动时，广播dhcp discover请求，当dnsmasq进程的监听接口ns-xxx监听到这种请求时，dnsmasq进程将根据配置文件(host和leases文件)中的内容去判定是否有未分配的ip和mac为请求者进行提供。
 * 4.最终VM便真实的获取到与保存在数据库中的ip和mac信息。neutron-dhcp-agent只是将所创建VM的ip和mac信息从数据库中获取到自己的配置文件中，然后等到VM启动时，为它提供。因此neutron-dhcp-agent相当于在VM和数据库之间起了个中间桥梁的作用。
 
