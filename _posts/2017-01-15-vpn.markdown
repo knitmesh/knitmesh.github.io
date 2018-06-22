@@ -8,6 +8,7 @@ header-img: "img/in-post/post-vpn/technology_bg3.jpg"
 catalog: true
 tags:
     - 网络
+    - OpenStack
 ---
 
 ### VPN的隧道技术
