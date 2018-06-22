@@ -2,8 +2,6 @@
 layout: post
 title: OpenStack高级特性简介
 tags: [OpenStack]
-date:       2018-05-17 12:00:00
-author:     "Jingh"
 header-img: "img/post-bg-unix-linux.jpg"
 catalog: true
 

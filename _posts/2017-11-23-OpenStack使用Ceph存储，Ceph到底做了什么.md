@@ -2,8 +2,6 @@
 layout: post
 title: OpenStack使用Ceph存储，Ceph到底做了什么?
 catalog: true
-date:       2018-04-19 12:00:00
-author:     "Jingh"
 header-img: "img/post-bg-unix-linux.jpg"
 tags: [OpenStack, Ceph]
 ---
