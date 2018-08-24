@@ -94,34 +94,31 @@ service-worker: true
 # Friends
 friends: [
     {
-        title: "乱序",
-        href: "http://mida.re/"
+        title: "cnblog博客地址",
+        href: "http://www.cnblogs.com/int32bit/"
     },{
-        title: "前端外刊评论",
-        href: "http://qianduan.guru/"
+        title: "麦子迈",
+        href: "http://www.wzxue.com/"
     },{
-        title: "天镶的博客",
-        href: "http://lingyu.wang/"
+        title: "酷壳",
+        href: "http://coolshell.cn/"
     },{
-        title: "Luke 的自留地",
-        href: "http://hmqk1995.github.io"
+        title: "陈沙克日志",
+        href: "http://www.chenshake.com/"
     },{
-        title: "Ebn's Blog",
-        href: "http://ebnbin.com/"
+        title: "世民谈云计算",
+        href: "http://www.cnblogs.com/sammyliu/"
     },{
-        title: "SmdCn's Blog",
-        href: "http://blog.smdcn.net"
+        title: "结构之法，算法之道",
+        href: "http://blog.csdn.net/v_july_v"
     },{
-        title: "David's Game",
-        href: "https://www.ruoyaowu.com/"
+        title: "阮一峰的网络日志",
+        href: "http://www.ruanyifeng.com/"
     },{
-        title: "DHong Say",
-        href: "http://dhong.co"
+        title: "Leetcode解题",
+        href: "https://github.com/int32bit/leetcode"
     },{
-        title: "尹峰以为",
-        href: "http://ingf.github.io/"
-    },{
-        title: "解旻的博客",
-        href: "http://xieminis.me/"
+        title: "依云's Blog",
+        href: "http://blog.lilydjwg.me/"
     }
 ]
