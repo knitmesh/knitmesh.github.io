@@ -68,13 +68,7 @@ ga_domain: jingh.top
 
 # Sidebar settings
 sidebar: true                           # whether or not using Sidebar.
-sidebar-about-description: "今日乐，不可忘，乐未央。<br>
-
-                            为乐常苦迟，<br>
-
-                            岁月逝，忽若飞，<br>
-
-                            何为自苦，使我心悲。"
+sidebar-about-description: "专注于云计算、大数据和分布式，分享和讨论Openstack、Docker、Ceph以及Devops相关技术。"
 sidebar-avatar: /img/jingh-master.jpg     # use absolute URL, seeing it's used in both `/` and `/about/`
 
 
