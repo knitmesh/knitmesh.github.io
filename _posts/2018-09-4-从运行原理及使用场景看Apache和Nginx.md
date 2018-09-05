@@ -283,7 +283,7 @@ Nginx和Apache一样，都是HTTP服务器软件，在功能实现上都采用�
 
 由于Nginx和Apache各自的优势，现在很多人选择了让两者在服务器中共存。在服务器端让Nginx在前，Apache在后。由Nginx做负载均衡和反向代理，并且处理静态文件，讲动态请求（如PHP应用）交给Apache去处理。
 
-参考
+#### 参考
 
 1. [Apache运行机制剖析](http://blog.csdn.net/hguisu/article/details/7395181)
 2. [Apache处理http请求的生命周期](http://qing.blog.sina.com.cn/tj/69004f5933000xlt.html)
