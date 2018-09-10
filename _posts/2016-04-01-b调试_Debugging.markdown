@@ -20,7 +20,12 @@ tags:
 > 译者注，参考：https://docs.python.org/2/library/pdb.html
 Or https://docs.python.org/3/library/pdb.html
 
+Python自带的pdb库，发现用pdb来调试程序还是很方便的，当然了，什么远程调试，多线程之类，pdb是搞不定的。
+
+用pdb调试有多种方式可选：
+
 #### 从命令行运行
+命令行启动目标程序，加上-m参数，这样调用myscript.py的话断点就是程序的执行第一行之前
 
 你可以在命令行使用Python debugger运行一个脚本， 举个例子：
 ```bash
@@ -43,6 +48,9 @@ print(make_bread())
 ```
 
 试下保存上面的脚本后运行之。你会在运行时马上进入debugger模式。现在是时候了解下debugger模式下的一些命令了。
+
+写作一行:
+```import pdb; pdb.set_trace()```
 
 #####命令列表：
 
