@@ -54,7 +54,7 @@ header-img: "img/post-bg-unix-linux.jpg"
 
 主要通过内核提供namespace技术实现隔离性，以下参考[酷壳](http://coolshell.cn/articles/17010.html):
 >Linux Namespace是Linux提供的一种内核级别环境隔离的方法。不知道你是否还记得很早以前的Unix有一个叫chroot的系统调用（通过修改根目录把用户jail到一个特定目录下），chroot提供了一种简单的隔离模式：chroot内部的文件系统无法访问外部的内容。Linux Namespace在此基础上，提供了对UTS、IPC、mount、PID、network、User等的隔离机制。
->
+
 
 Linux Namespace 有如下种类，官方文档在这里[《Namespace in Operation》](http://lwn.net/Articles/531114/)
 
