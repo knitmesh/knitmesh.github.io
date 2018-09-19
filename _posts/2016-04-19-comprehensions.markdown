@@ -59,7 +59,6 @@ for x in range(10):
 squared = [x**2 for x in range(10)]
 ```
 
-
 ## 字典推导式（```dict``` comprehensions）
 
 字典推导和列表推导的使用方法是类似的。这里有个我最近发现的例子：
@@ -79,6 +78,7 @@ mcase_frequency = {
 就我个人来说没有大量使用字典推导式。
 
 你还可以快速对换一个字典的键和值：
+
 ```python
 {v: k for k, v in some_dict.items()}
 ```
@@ -87,6 +87,7 @@ mcase_frequency = {
 ## 集合推导式（```set``` comprehensions）
 
 它们跟列表推导式也是类似的。 唯一的区别在于它们使用大括号```{}```。 举个例子：
+
 ```python
 squared = {x**2 for x in [1, 1, 2]}
 print(squared)
