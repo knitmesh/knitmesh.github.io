@@ -6,8 +6,7 @@ date:       2017-03-11 12:00:00
 author:     "Jingh"
 header-img: "img/bg-footer.jpg"
 catalog: true
-tags:
-    - OpenStack
+tags: [OpenStack]
 ---
 
 翻译自原文： https://ilearnstack.com/2013/04/26/request-flow-for-provisioning-instance-in-openstack/

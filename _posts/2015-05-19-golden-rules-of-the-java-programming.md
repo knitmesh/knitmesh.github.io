@@ -6,8 +6,7 @@ date:       2015-05-19 12:00:00
 author:     "Jingh"
 header-img: "img/bg-2.jpg"
 catalog: true
-tags : 
-    - Java
+tags: [java]
 ---
 
 

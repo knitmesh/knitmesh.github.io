@@ -6,8 +6,8 @@ date:       2016-08-25 12:00:00
 author:     "Jingh"
 header-img: "img/urbanoutfitters.png"
 catalog: true
-tags:
-    - Cache
+tags: [Cache]
+
 ---
 原文： [缓存更新的套路](https://coolshell.cn/articles/174161.html)
 

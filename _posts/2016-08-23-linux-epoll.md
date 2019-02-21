@@ -6,10 +6,8 @@ date:       2016-08-23 12:00:00
 author:     "Jingh"
 header-img: "img/in-post/post-Intermediate/intermediatePython-01.jpg"
 catalog: true
-tags:
-    - Linux
-    - Epoll
-    - 并发
+tags: [Linux, Epoll, 并发]
+
 ---
 
 

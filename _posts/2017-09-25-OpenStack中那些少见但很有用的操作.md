@@ -3,7 +3,7 @@ layout: post
 title: OpenStack中那些很少见但很有用的操作
 catalog: false
 header-img: "img/bg-pricing.jpg"
-tag: [OpenStack]
+tags: [OpenStack]
 ---
 
 从2013年开始折腾OpenStack也有好几年的时间了，在使用过程中，我发现很多很有用的功能，但是却很少被提及，比如Cinder volume过户、Glance镜像分享、纳管外部volume、挂载volume到宿主机等等。

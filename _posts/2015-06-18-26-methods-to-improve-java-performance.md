@@ -6,8 +6,7 @@ date:       2015-06-18 12:00:00
 author:     "Jingh"
 header-img: "img/bg-2.jpg"
 catalog: true
-tags : 
-    - Java
+tags: [java]
 ---
 
 原文： [Java编程中“为了性能”尽量要做到的一些地方](http://www.iteye.com/magazines/66)

@@ -6,10 +6,8 @@ date:       2017-03-10 12:00:00
 author:     "Jingh"
 header-img: "img/bg-footer.jpg"
 catalog: true
-tags:
-    - OpenStack
-    - OAuth
-    - Keystone
+tags: [OpenStack, OAuth, Keystone]
+
 ---
 
 ### What are trusts ?

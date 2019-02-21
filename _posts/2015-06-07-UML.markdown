@@ -4,8 +4,7 @@ title:      "UML学习归纳整理"
 date:       2015-06-07 00:00:00
 author:     "wblearn"
 header-img: "img/post-bg-2015.jpg"
-tags:
-    - UML
+tags: [UML]
 ---
 
 <div data-note-content class="show-content">
