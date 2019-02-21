@@ -41,7 +41,7 @@ Thanks Jekyll and Github Page!
 |27|[配置高效科学的Linux开发环境](https://www.jingh.top//2016/10/03/配置高效科学的Linux开发环境)|Linux|2016-10-03|
 |28|[Harbor命令行工具介绍](https://www.jingh.top//2016/09/09/Harbor命令行工具介绍)|Docker|2016-09-09|
 |29|[cache-update](https://www.jingh.top//2016/08/25/cache-update)|Cache|2016-08-25|
-|30|[libevent](https://www.jingh.top//2016/08/24/libevent)||2016-08-24|
+|30|[libevent](https://www.jingh.top//2016/08/24/libevent)|Linux, Epoll, 并发|2016-08-24|
 |31|[linux-epoll](https://www.jingh.top//2016/08/23/linux-epoll)|Linux, Epoll, 并发|2016-08-23|
 |32|[OpenStack使用ISO镜像启动云主机](https://www.jingh.top//2016/08/01/OpenStack使用ISO镜像启动云主机)|OpenStack|2016-08-01|
 |33|[Sparse文件处理和传输](https://www.jingh.top//2016/06/01/Sparse文件处理和传输)|Linux|2016-06-01|
@@ -50,8 +50,8 @@ Thanks Jekyll and Github Page!
 |36|[Docker实现跨主机通信](https://www.jingh.top//2016/05/10/Docker实现跨主机通信)|Docker|2016-05-10|
 |37|[Linux常用网络工具总结](https://www.jingh.top//2016/05/04/Linux常用网络工具总结)|Linux|2016-05-04|
 |38|[python-知识整理](https://www.jingh.top//2015/11/27/python-知识整理)|python|2015-11-27|
-|39|[java-multithread](https://www.jingh.top//2015/08/02/java-multithread)||2015-08-02|
-|40|[26-methods-to-improve-java-performance](https://www.jingh.top//2015/06/18/26-methods-to-improve-java-performance)|java|2015-06-18|
+|39|[java-multithread](https://www.jingh.top//2015/08/02/java-multithread)|java, 多线程|2015-08-02|
+|40|[methods-to-improve-java-performance](https://www.jingh.top//2015/06/18/methods-to-improve-java-performance)|java|2015-06-18|
 |41|[golden-rules-of-the-java-programming](https://www.jingh.top//2015/05/19/golden-rules-of-the-java-programming)|java|2015-05-19|
 |42|[使用bash关联数组统计单词频数](https://www.jingh.top//2015/03/18/使用bash关联数组统计单词频数)|Linux, bash|2015-03-18|
 |43|[bash字符串前美元符号的作用](https://www.jingh.top//2014/11/30/bash字符串前美元符号的作用)|Linux, bash|2014-11-30|
