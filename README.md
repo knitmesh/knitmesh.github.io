@@ -18,20 +18,20 @@ Thanks Jekyll and Github Page!
 |4|[OpenStack资源管理层次模型](https://www.jingh.top//2018/05/21/OpenStack资源管理层次模型)|OpenStack|2018-05-21|
 |5|[OpenStack高级特性简介](https://www.jingh.top//2018/05/17/OpenStack高级特性简介)|OpenStack|2018-05-17|
 |6|[OpenStack使用Ceph存储，Ceph到底做了什么](https://www.jingh.top//2017/11/23/OpenStack使用Ceph存储，Ceph到底做了什么)|OpenStack, Ceph|2017-11-23|
-|7|[Docker使用OpenStack Cinder持久化volume原理分析及实践](https://www.jingh.top//2017/10/04/Docker使用OpenStack-Cinder持久化volume原理分析及实践)||2017-10-04|
-|8|[OpenStack中那些少见但很有用的操作](https://www.jingh.top//2017/09/25/OpenStack中那些少见但很有用的操作)||2017-09-25|
+|7|[Docker使用OpenStack Cinder持久化volume原理分析及实践](https://www.jingh.top//2017/10/04/Docker使用OpenStack-Cinder持久化volume原理分析及实践)|OpenStack, Docker|2017-10-04|
+|8|[OpenStack中那些少见但很有用的操作](https://www.jingh.top//2017/09/25/OpenStack中那些少见但很有用的操作)|OpenStack|2017-09-25|
 |9|[OpenStack虚拟机挂载数据卷过程分析](https://www.jingh.top//2017/09/08/OpenStack虚拟机挂载数据卷过程分析)|OpenStack|2017-09-08|
 |10|[OpenStack工作流服务Mistral项目简介](https://www.jingh.top//2017/09/03/OpenStack工作流服务Mistral项目简介)|OpenStack|2017-09-03|
 |11|[如何阅读OpenStack源码](https://www.jingh.top//2017/08/28/如何阅读OpenStack源码)|OpenStack|2017-08-28|
-|12|[openstack基础知识——eventlet](https://www.jingh.top//2017/08/27/openstack基础知识——eventlet)||2017-08-27|
+|12|[openstack基础知识——eventlet](https://www.jingh.top//2017/08/27/openstack基础知识——eventlet)|python, 协程|2017-08-27|
 |13|[OpenStack数据库版本控制工具简介](https://www.jingh.top//2017/08/24/OpenStack数据库版本控制工具简介)|OpenStack, Python|2017-08-24|
 |14|[谈谈Docker数据容器](https://www.jingh.top//2017/05/14/谈谈Docker数据容器)|Docker|2017-05-14|
 |15|[使用Harbor构建私有镜像仓库](https://www.jingh.top//2017/04/18/使用Harbor构建私有镜像仓库)|Docker|2017-04-18|
 |16|[Cinder数据卷备份原理和实践](https://www.jingh.top//2017/03/30/Cinder数据卷备份原理和实践)|OpenStack|2017-03-30|
 |17|[虚拟机、Docker和Hyper技术比较](https://www.jingh.top//2017/03/20/虚拟机、Docker和Hyper技术比较)|Docker|2017-03-20|
 |18|[cinder-volume服务如何实现AA高可用](https://www.jingh.top//2017/03/16/cinder-volume服务如何实现AA高可用)|OpenStack|2017-03-16|
-|19|[Provisioning-Instance](https://www.jingh.top//2017/03/11/Provisioning-Instance)||2017-03-11|
-|20|[keystone-trust](https://www.jingh.top//2017/03/10/keystone-trust)||2017-03-10|
+|19|[Provisioning-Instance](https://www.jingh.top//2017/03/11/Provisioning-Instance)|OpenStack|2017-03-11|
+|20|[keystone-trust](https://www.jingh.top//2017/03/10/keystone-trust)|OpenStack, OAuth, Keystone|2017-03-10|
 |21|[Ceph-RBD-mirror功能介绍](https://www.jingh.top//2017/01/24/Ceph-RBD-mirror功能介绍)|Ceph, OpenStack|2017-01-24|
 |22|[聊聊Nova-compute-driver的那些趣事](https://www.jingh.top//2017/01/07/聊聊Nova-compute-driver的那些趣事)|OpenStack|2017-01-07|
 |23|[OpenStack虚拟机保护的几种方法](https://www.jingh.top//2016/11/09/OpenStack虚拟机保护的几种方法)|OpenStack|2016-11-09|
@@ -40,20 +40,20 @@ Thanks Jekyll and Github Page!
 |26|[OpenStack服务心跳机制和状态监控](https://www.jingh.top//2016/10/24/OpenStack服务心跳机制和状态监控)|OpenStack|2016-10-24|
 |27|[配置高效科学的Linux开发环境](https://www.jingh.top//2016/10/03/配置高效科学的Linux开发环境)|Linux|2016-10-03|
 |28|[Harbor命令行工具介绍](https://www.jingh.top//2016/09/09/Harbor命令行工具介绍)|Docker|2016-09-09|
-|29|[cache-update](https://www.jingh.top//2016/08/25/cache-update)||2016-08-25|
+|29|[cache-update](https://www.jingh.top//2016/08/25/cache-update)|Cache|2016-08-25|
 |30|[libevent](https://www.jingh.top//2016/08/24/libevent)||2016-08-24|
-|31|[linux-epoll](https://www.jingh.top//2016/08/23/linux-epoll)||2016-08-23|
+|31|[linux-epoll](https://www.jingh.top//2016/08/23/linux-epoll)|Linux, Epoll, 并发|2016-08-23|
 |32|[OpenStack使用ISO镜像启动云主机](https://www.jingh.top//2016/08/01/OpenStack使用ISO镜像启动云主机)|OpenStack|2016-08-01|
 |33|[Sparse文件处理和传输](https://www.jingh.top//2016/06/01/Sparse文件处理和传输)|Linux|2016-06-01|
 |34|[如何构建OpenStack镜像](https://www.jingh.top//2016/05/28/如何构建OpenStack镜像)|OpenStack|2016-05-28|
 |35|[Ceph-Pool操作总结](https://www.jingh.top//2016/05/19/Ceph-Pool操作总结)|Ceph|2016-05-19|
 |36|[Docker实现跨主机通信](https://www.jingh.top//2016/05/10/Docker实现跨主机通信)|Docker|2016-05-10|
 |37|[Linux常用网络工具总结](https://www.jingh.top//2016/05/04/Linux常用网络工具总结)|Linux|2016-05-04|
-|38|[python-知识整理](https://www.jingh.top//2015/11/27/python-知识整理)||2015-11-27|
+|38|[python-知识整理](https://www.jingh.top//2015/11/27/python-知识整理)|python|2015-11-27|
 |39|[java-multithread](https://www.jingh.top//2015/08/02/java-multithread)||2015-08-02|
-|40|[26-methods-to-improve-java-performance](https://www.jingh.top//2015/06/18/26-methods-to-improve-java-performance)||2015-06-18|
-|41|[golden-rules-of-the-java-programming](https://www.jingh.top//2015/05/19/golden-rules-of-the-java-programming)||2015-05-19|
+|40|[26-methods-to-improve-java-performance](https://www.jingh.top//2015/06/18/26-methods-to-improve-java-performance)|java|2015-06-18|
+|41|[golden-rules-of-the-java-programming](https://www.jingh.top//2015/05/19/golden-rules-of-the-java-programming)|java|2015-05-19|
 |42|[使用bash关联数组统计单词频数](https://www.jingh.top//2015/03/18/使用bash关联数组统计单词频数)|Linux, bash|2015-03-18|
 |43|[bash字符串前美元符号的作用](https://www.jingh.top//2014/11/30/bash字符串前美元符号的作用)|Linux, bash|2014-11-30|
-|44|[随机算法和洗牌算法](https://www.jingh.top//2014/10/24/随机算法和洗牌算法)||2014-10-24|
-|45|[小米2013校招笔试算法题-朋友圈](https://www.jingh.top//2013/10/27/小米2013校招笔试算法题-朋友圈)||2013-10-27|
+|44|[随机算法和洗牌算法](https://www.jingh.top//2014/10/24/随机算法和洗牌算法)|算法|2014-10-24|
+|45|[小米2013校招笔试算法题-朋友圈](https://www.jingh.top//2013/10/27/小米2013校招笔试算法题-朋友圈)|算法|2013-10-27|
