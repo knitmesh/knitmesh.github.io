@@ -6,10 +6,8 @@ date:       2015-08-2 12:00:00
 author:     "Jingh"
 header-img: "img/bg-2.jpg"
 catalog: true
+tags: [java, 多线程]
 
-tags : 
-    - Java
-    - 多线程
 ---
 
 注：本文的内容翻译自[http://tutorials.jenkov.com/java-concurrency/deadlock.html][1]
