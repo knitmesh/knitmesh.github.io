@@ -2,7 +2,7 @@
 layout:     post
 title:      "SSO原理与简单实现"
 date:       2015-05-16 00:00:00
-author:     "wblearn"
+author:     "jingh"
 header-img: "img/post-bg-rwd.jpg"
 tags: [SSO]
 ---
