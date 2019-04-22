@@ -40,7 +40,7 @@ Mistral是一个OpenStack生态圈中比较新的项目，该项目的目标是�
 action是Mistral中最小执行单元（执行指令），对应一个命令或者一次API请求。内置OpenStack相关的actions实际上封装了所有OpenStack组件的pythonclient接口，比如`nova.servers_start`对应python-novaclient项目的`novaclient/v2/servers.py`模块的`start()`方法。目前nova包含227个action，cinder包含128个action，glance包含20个action，几乎涵盖了所有虚拟机管理、volume管理等。以cinder backup为例，包含的actions列表如下:
 
 ```sh
-int32bit $ mistral action-list | awk '/\scinder.backup/{print $4,$8}' | tr -d ',' | sed 's/ / -> /'
+jingh $ mistral action-list | awk '/\scinder.backup/{print $4,$8}' | tr -d ',' | sed 's/ / -> /'
 cinder.backups_create -> volume_id
 cinder.backups_delete -> backup
 cinder.backups_export_record -> backup_id
@@ -93,7 +93,7 @@ std.ssh_proxied
 std.wait_ssh
 ```
 
-需要注意的是，Mistral目前尚不支持动态增删action，如果需要添加自定义action必须手写代码，修改`setup.cfg`配置文件并重新安装部署Mistral服务，参考官方文档[Creating custom action](https://docs.openstack.org/developer/mistral/developer/creating_custom_action.html)，本人写了一个脚本实现了自动发现和注册自定义action的功能，参考[mistral-actions](https://github.com/int32bit/mistral-actions)。不过Mistral支持创建Ad-hoc actions，即封装已有的action为新的action，类似于编程语言的继承关系或者模板。比如std.email需要传递很多参数，如果某些参数固定并且可以重复使用的话，我们可以创建一个action继承自std.email，创建一个新文件`error_email.yaml`内容如下：
+需要注意的是，Mistral目前尚不支持动态增删action，如果需要添加自定义action必须手写代码，修改`setup.cfg`配置文件并重新安装部署Mistral服务，参考官方文档[Creating custom action](https://docs.openstack.org/developer/mistral/developer/creating_custom_action.html)，本人写了一个脚本实现了自动发现和注册自定义action的功能，参考[mistral-actions](https://github.com/jingh/mistral-actions)。不过Mistral支持创建Ad-hoc actions，即封装已有的action为新的action，类似于编程语言的继承关系或者模板。比如std.email需要传递很多参数，如果某些参数固定并且可以重复使用的话，我们可以创建一个action继承自std.email，创建一个新文件`error_email.yaml`内容如下：
 
 ```yaml
 ---
@@ -213,7 +213,7 @@ start_server:
       on-complete:
         - wait_for_server_to_active
     wait_for_server_to_active:
-      action: int32bit.nova.servers.assert_power_status server_id=<% $.server_id %> status='running'
+      action: jingh.nova.servers.assert_power_status server_id=<% $.server_id %> status='running'
       retry:
         delay: 5
         count: 5
@@ -607,7 +607,7 @@ Mistral支持cloud cron功能，即创建定时任务，其定义语法和linux 
 mistral还支持定义开始执行时间、执行次数等：
 
 ```
-int32bit $ mistral cron-trigger-create --pattern '* * * * *' --count 5 test-hello-world hello-world
+jingh $ mistral cron-trigger-create --pattern '* * * * *' --count 5 test-hello-world hello-world
 +----------------------+--------------------------------------+
 | Field                | Value                                |
 +----------------------+--------------------------------------+
@@ -628,11 +628,11 @@ int32bit $ mistral cron-trigger-create --pattern '* * * * *' --count 5 test-hell
 查看cron任务列表:
 
 ```
-int32bit $ mistral cron-trigger-list
+jingh $ mistral cron-trigger-list
 +--------------------------------------+------------------+-------------+--------+-------------+---------------------+----------------------+-----------+---------------------+---------------------+
 | ID                                   | Name             | Workflow    | Params | Pattern     | Next execution time | Remaining executions | Status    | Created at          | Updated at          |
 +--------------------------------------+------------------+-------------+--------+-------------+---------------------+----------------------+-----------+---------------------+---------------------+
-| 88fd87ba-2429-4995-abba-54bfff91ba13 | int32bit-test-1  | hello-world | {}     | */1 * * * * | 2017-08-17 08:47:00 |                    0 | COMPLETED | 2017-08-17 08:41:49 | 2017-08-17 08:46:58 |
+| 88fd87ba-2429-4995-abba-54bfff91ba13 | jingh-test-1  | hello-world | {}     | */1 * * * * | 2017-08-17 08:47:00 |                    0 | COMPLETED | 2017-08-17 08:41:49 | 2017-08-17 08:46:58 |
 | a3a0ed3f-a5ef-4416-af9f-33cef498bbb6 | test-hello-world | hello-world | {}     | * * * * *   | 2017-08-28 02:36:00 |                    4 | READY     | 2017-08-28 02:35:08 | None                |
 +--------------------------------------+------------------+-------------+--------+-------------+---------------------+----------------------+-----------+---------------------+---------------------+
 ```
@@ -640,7 +640,7 @@ int32bit $ mistral cron-trigger-list
 通过`execution-list`查看执行结果，其中cron id为关联的cron任务:
 
 ```
-int32bit $ mistral execution-list
+jingh $ mistral execution-list
 +--------------------------------------+--------------------------------------+---------------+--------------------------------------+-------------------+---------+------------+---------------------+---------------------+
 | ID                                   | Workflow ID                          | Workflow name | Cron ID                              | Task Execution ID | State   | State info | Created at          | Updated at          |
 +--------------------------------------+--------------------------------------+---------------+--------------------------------------+-------------------+---------+------------+---------------------+---------------------+

@@ -17,7 +17,7 @@ OpenStack有三种资源视图，分别为用户视图、OpenStack视图以及�
 
 用户视图资源使用量在OpenStack中通常称为`quota usage`，我们可以通过OpenStack的API获取资源的使用量，以块存储资源Cinder为例，查看其quota usage：
 ```
-~/int32bit # cinder quota-usage 240e267f0c4043b3aac9123b4e7e85a0
+~/jingh # cinder quota-usage 240e267f0c4043b3aac9123b4e7e85a0
 +----------------------+--------+----------+-------+
 |         Type         | In_use | Reserved | Limit |
 +----------------------+--------+----------+-------+
@@ -48,7 +48,7 @@ OpenStack统计的资源总量在不超售的情况下等于所有物理资源�
 OpenStack Nova通过`hypervisor-stats`查看整个集群的资源使用情况:
 
 ```
-~/int32bit # nova hypervisor-stats
+~/jingh # nova hypervisor-stats
 +----------------------+---------+
 | Property             | Value   |
 +----------------------+---------+
@@ -72,7 +72,7 @@ OpenStack Nova通过`hypervisor-stats`查看整个集群的资源使用情况:
 要查看单个计算节点的资源可以使用hypervisor-show子命令:
 
 ```
-~/int32bit # nova hypervisor-show 1
+~/jingh # nova hypervisor-show 1
 +---------------------------+-----------------+
 | Property                  | Value           |
 +---------------------------+-----------------+

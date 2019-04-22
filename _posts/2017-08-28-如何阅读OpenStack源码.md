@@ -31,7 +31,7 @@ OpenStack服务越来越多、越来越复杂，覆盖的技术生态越来越�
 
 ### 1.2 工欲善其事必先利其器
 
-要阅读源代码首先需要安装科学的代码阅读工具，图形界面使用pycharm没有问题，不过通常在虚拟机中是没有图形界面的，首选vim，需要简单的配置使其支持代码跳转和代码搜索，可以参考[GitHub - int32bit/dotfiles: A set of vim, zsh, git, and tmux configuration files.](https://github.com/int32bit/dotfiles)。如图：
+要阅读源代码首先需要安装科学的代码阅读工具，图形界面使用pycharm没有问题，不过通常在虚拟机中是没有图形界面的，首选vim，需要简单的配置使其支持代码跳转和代码搜索，可以参考[GitHub - jingh/dotfiles: A set of vim, zsh, git, and tmux configuration files.](https://github.com/jingh/dotfiles)。如图：
 
 ![vim demo](/img/posts/如何阅读OpenStack源码/vim.png)
 
@@ -345,4 +345,4 @@ cctxt.cast(ctxt, 'build_and_run_instance', ...)
 
 ![create](/img/posts/如何阅读OpenStack源码/create.png)
 
-如果你对OpenStack的其它服务以及操作流程感兴趣，可以参考我的[openstack-workflow](https://github.com/int32bit/openstack-workflow)项目, 这个项目是我本人在学习过程中记录，绘制成序列图，上图就是其中一个实例。项目地址为: https://github.com/int32bit/openstack-workflow，目前完成了Nova的大多数操作。
+如果你对OpenStack的其它服务以及操作流程感兴趣，可以参考我的[openstack-workflow](https://github.com/jingh/openstack-workflow)项目, 这个项目是我本人在学习过程中记录，绘制成序列图，上图就是其中一个实例。项目地址为: https://github.com/jingh/openstack-workflow，目前完成了Nova的大多数操作。

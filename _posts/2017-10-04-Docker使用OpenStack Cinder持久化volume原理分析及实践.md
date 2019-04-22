@@ -10,9 +10,9 @@ tags: [OpenStack, Docker]
 
 ### 1.1 OpenStack Cinder简介
 
-OpenStack Cinder为OpenStack提供块存储服务，其功能类似AWS的EBS服务，目前使用最多的是为OpenStack Nova虚拟机提供虚拟硬盘功能，即把volume挂载到虚拟机中，作为附加弹性硬盘使用，关于OpenStack Cinder volume挂载到虚拟机的过程分析可以参考之前写的博客[OpenStack虚拟机挂载数据卷过程分析](http://int32bit.me/2017/09/08/OpenStack%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%8C%82%E8%BD%BD%E6%95%B0%E6%8D%AE%E5%8D%B7%E8%BF%87%E7%A8%8B%E5%88%86%E6%9E%90/)，这篇博客也是了解本文内容的基础。
+OpenStack Cinder为OpenStack提供块存储服务，其功能类似AWS的EBS服务，目前使用最多的是为OpenStack Nova虚拟机提供虚拟硬盘功能，即把volume挂载到虚拟机中，作为附加弹性硬盘使用，关于OpenStack Cinder volume挂载到虚拟机的过程分析可以参考之前写的博客[OpenStack虚拟机挂载数据卷过程分析](http://jingh.me/2017/09/08/OpenStack%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%8C%82%E8%BD%BD%E6%95%B0%E6%8D%AE%E5%8D%B7%E8%BF%87%E7%A8%8B%E5%88%86%E6%9E%90/)，这篇博客也是了解本文内容的基础。
 
-但是，OpenStack Cinder不仅仅是为Nova虚拟机提供云硬盘功能，事实上，Cinder并不关心是谁在消费它的volume，除了虚拟机，还有可能是物理机和容器。Cinder volume挂载到物理机前面已经介绍过，可以参考[OpenStack中那些很少见但很有用的操作](http://int32bit.me/2017/09/25/OpenStack%E4%B8%AD%E9%82%A3%E4%BA%9B%E5%B0%91%E8%A7%81%E4%BD%86%E5%BE%88%E6%9C%89%E7%94%A8%E7%9A%84%E6%93%8D%E4%BD%9C/)。Cinder volume挂载到虚拟机以及物理机都介绍过了，剩下最后一个内容，Cinder volume如何挂载到Docker容器中呢，本文接下来将详细介绍并通过两个driver实例实践。
+但是，OpenStack Cinder不仅仅是为Nova虚拟机提供云硬盘功能，事实上，Cinder并不关心是谁在消费它的volume，除了虚拟机，还有可能是物理机和容器。Cinder volume挂载到物理机前面已经介绍过，可以参考[OpenStack中那些很少见但很有用的操作](http://jingh.me/2017/09/25/OpenStack%E4%B8%AD%E9%82%A3%E4%BA%9B%E5%B0%91%E8%A7%81%E4%BD%86%E5%BE%88%E6%9C%89%E7%94%A8%E7%9A%84%E6%93%8D%E4%BD%9C/)。Cinder volume挂载到虚拟机以及物理机都介绍过了，剩下最后一个内容，Cinder volume如何挂载到Docker容器中呢，本文接下来将详细介绍并通过两个driver实例实践。
 
 ### 1.2 Docker volume简介
 
@@ -89,7 +89,7 @@ $ docker volume inspect 0e8d4d3936ec3b84c2ee4db388f45cbe5c84194d89d69be6b7a616fb
 * create: 直接调用Cinder API创建一个volume。
 * remote: 直接调用Cinder API删除一个volume。
 * get/list: 直接调用Cinder API获取volume列表。
-* mount: 前面提到Docker volume必须先挂载到本地，而这不正是恰好对应Cinder的local-attach么，具体内容可以参考[OpenStack中那些很少见但很有用的操作](http://int32bit.me/2017/09/25/OpenStack%E4%B8%AD%E9%82%A3%E4%BA%9B%E5%B0%91%E8%A7%81%E4%BD%86%E5%BE%88%E6%9C%89%E7%94%A8%E7%9A%84%E6%93%8D%E4%BD%9C/)。local attach到本地设备后，如果块设备没有安装文件系统，则mount操作还需要执行文件系统格式化。创建完文件系统后，只需要mount到宿主机文件系统就可以了，Docker并不关心底层到底是什么存储系统，它只是把它当作宿主机的一个目录，剩下的工作就和Docker挂载本地目录一样了。
+* mount: 前面提到Docker volume必须先挂载到本地，而这不正是恰好对应Cinder的local-attach么，具体内容可以参考[OpenStack中那些很少见但很有用的操作](http://jingh.me/2017/09/25/OpenStack%E4%B8%AD%E9%82%A3%E4%BA%9B%E5%B0%91%E8%A7%81%E4%BD%86%E5%BE%88%E6%9C%89%E7%94%A8%E7%9A%84%E6%93%8D%E4%BD%9C/)。local attach到本地设备后，如果块设备没有安装文件系统，则mount操作还需要执行文件系统格式化。创建完文件系统后，只需要mount到宿主机文件系统就可以了，Docker并不关心底层到底是什么存储系统，它只是把它当作宿主机的一个目录，剩下的工作就和Docker挂载本地目录一样了。
 * umount: 不需要解释，已经非常明了，只需要从本地文件系统umount，然后从本地设备detach。
 
 目前Docker挂载Cinder volume的方案还挺多的，如:
@@ -186,27 +186,27 @@ tailf ./nohup
 使用docker创建一个volume，如下:
 
 ```sh
-root@devstack:~# docker volume create -d cinder --name int32bit-test-1 -o size=2
-int32bit-test-1
+root@devstack:~# docker volume create -d cinder --name jingh-test-1 -o size=2
+jingh-test-1
 root@devstack:~# docker volume ls
 DRIVER              VOLUME NAME
-cinder              int32bit-test-1
+cinder              jingh-test-1
 ```
 
-启动一个容器并挂载`int32bit-test-1`:
+启动一个容器并挂载`jingh-test-1`:
 
 ```sh
-root@devstack:~# docker run -t -i --rm -v int32bit-test-1:/int32bit-test-1 busybox
-/ # cd /int32bit-test-1/
-/int32bit-test-1 # ls
+root@devstack:~# docker run -t -i --rm -v jingh-test-1:/jingh-test-1 busybox
+/ # cd /jingh-test-1/
+/jingh-test-1 # ls
 lost+found
-/int32bit-test-1 # echo "HelloWorld" >hello.txt
-/int32bit-test-1 # ls
+/jingh-test-1 # echo "HelloWorld" >hello.txt
+/jingh-test-1 # ls
 hello.txt   lost+found
-/int32bit-test-1 #
+/jingh-test-1 #
 ```
 
-以上我们挂载刚刚创建的volume到`/int32bit-test-1`中，并写了`HelloWorld`到`hello.txt`文件中。
+以上我们挂载刚刚创建的volume到`/jingh-test-1`中，并写了`HelloWorld`到`hello.txt`文件中。
 
 启动容器时cinder-docker-driver日志如下:
 
@@ -238,8 +238,8 @@ Superblock backups stored on blocks:
 	Writing inode tables:  0/16 done                            
 	Creating journal (16384 blocks): done
 	Writing superblocks and filesystem accounting information:  0/16 done"
-time="2017-09-29T21:29:50+08:00" level=debug msg="Begin utils.Mount device: /dev/sdd on: /var/lib/cinder/mount/int32bit-test-1"
-time="2017-09-29T21:29:50+08:00" level=debug msg="Response from mount /dev/sdd at /var/lib/cinder/mount/int32bit-test-1: "
+time="2017-09-29T21:29:50+08:00" level=debug msg="Begin utils.Mount device: /dev/sdd on: /var/lib/cinder/mount/jingh-test-1"
+time="2017-09-29T21:29:50+08:00" level=debug msg="Response from mount /dev/sdd at /var/lib/cinder/mount/jingh-test-1: "
 time="2017-09-29T21:29:50+08:00" level=debug msg="Call gophercloud Attach..."
 time="2017-09-29T21:29:50+08:00" level=debug msg="Attach results: {ErrResult:{Result:{Body:<nil> Header:map[] Err:<nil>}}}"
 ```
@@ -249,20 +249,20 @@ time="2017-09-29T21:29:50+08:00" level=debug msg="Attach results: {ErrResult:{Re
 可以通过`lsblk`确认:
 
 ```
-root@devstack:~/cinder-docker-driver# lsblk -s | grep int32bit-test
-sdd		8:48   0    2G  0 disk /var/lib/cinder/mount/int32bit-test-1
+root@devstack:~/cinder-docker-driver# lsblk -s | grep jingh-test
+sdd		8:48   0    2G  0 disk /var/lib/cinder/mount/jingh-test-1
 ```
 
 从docker容器实例中退出，此时会自动把volume从本地detach。
 
-我们使用cinder把创建的卷手动attach到本地并挂载，关于Cinder的local attach，可参考[OpenStack中那些很少见但很有用的操作](http://int32bit.me/2017/09/25/OpenStack%E4%B8%AD%E9%82%A3%E4%BA%9B%E5%B0%91%E8%A7%81%E4%BD%86%E5%BE%88%E6%9C%89%E7%94%A8%E7%9A%84%E6%93%8D%E4%BD%9C/)。
+我们使用cinder把创建的卷手动attach到本地并挂载，关于Cinder的local attach，可参考[OpenStack中那些很少见但很有用的操作](http://jingh.me/2017/09/25/OpenStack%E4%B8%AD%E9%82%A3%E4%BA%9B%E5%B0%91%E8%A7%81%E4%BD%86%E5%BE%88%E6%9C%89%E7%94%A8%E7%9A%84%E6%93%8D%E4%BD%9C/)。
 
 ```sh
 root@devstack:~# cinder list
 +--------------------------------------+-----------+-----------------+------+-------------+----------+-------------+
 | ID                                   | Status    | Name            | Size | Volume Type | Bootable | Attached to |
 +--------------------------------------+-----------+-----------------+------+-------------+----------+-------------+
-| 58837c2b-af79-4f89-97ea-40e2622d2c52 | available | int32bit-test-1 | 2    | lvmdriver-1 | false    |             |
+| 58837c2b-af79-4f89-97ea-40e2622d2c52 | available | jingh-test-1 | 2    | lvmdriver-1 | false    |             |
 +--------------------------------------+-----------+-----------------+------+-------------+----------+-------------+
 root@devstack:~# cinder local-attach 58837c2b-af79-4f89-97ea-40e2622d2c52
 +----------+-----------------------------------+
@@ -359,18 +359,18 @@ fuxi-server --config-file /etc/fuxi/fuxi.conf
 使用Docker创建一个volume:
 
 ```sh
-$ docker volume create -d fuxi --name int32bit-test-fuxi
-int32bit-test-fuxi
-$ docker volume ls | grep int32bit-test-fuxi
-fuxi                int32bit-test-fuxi
+$ docker volume create -d fuxi --name jingh-test-fuxi
+jingh-test-fuxi
+$ docker volume ls | grep jingh-test-fuxi
+fuxi                jingh-test-fuxi
 ```
 
 挂载volume到Docker容器中:
 
 ```sh
-$ docker run -ti --rm -v int32bit-test-fuxi:/int32bit-test-fuxi busybox
-/ # cd /int32bit-test-fuxi/
-/int32bit-test-fuxi # ls
+$ docker run -ti --rm -v jingh-test-fuxi:/jingh-test-fuxi busybox
+/ # cd /jingh-test-fuxi/
+/jingh-test-fuxi # ls
 a           b           c           lost+found
 ```
 
@@ -380,7 +380,7 @@ a           b           c           lost+found
 $ lsblk -Sf
 NAME HCTL       TYPE VENDOR   MODEL             REV TRAN   NAME FSTYPE LABEL UUID                                 MOUNTPOINT
 sda  2:0:0:0    disk ATA      VBOX HARDDISK    1.0  sata   sda
-sdb  11:0:0:1   disk IET      VIRTUAL-DISK     0001 iscsi  sdb  ext4         d04b16a1-3392-41df-999f-e6c36b5d0cd6 /fuxi/data/cinder/int32bit-test-fuxi
+sdb  11:0:0:1   disk IET      VIRTUAL-DISK     0001 iscsi  sdb  ext4         d04b16a1-3392-41df-999f-e6c36b5d0cd6 /fuxi/data/cinder/jingh-test-fuxi
 sr0  1:0:0:0    rom  VBOX     CD-ROM           1.0  ata    sr0
 ```
 
@@ -453,7 +453,7 @@ def mount(self, docker_volume_name):
     return mountpoint
 ```
 
-其中`mountpoint`是挂载的目标目录，其路径为`volume_dir + volume_type + volume_name`，其中`volume_dir`通过配置文件配置，默认为`/fuxi/data`，`volume_type`这里为`cinder`，假设volume name为`int32bit-test-volume`，则挂载路径为`/fuxi/data/cinder/int32bit-test-volume`。
+其中`mountpoint`是挂载的目标目录，其路径为`volume_dir + volume_type + volume_name`，其中`volume_dir`通过配置文件配置，默认为`/fuxi/data`，`volume_type`这里为`cinder`，假设volume name为`jingh-test-volume`，则挂载路径为`/fuxi/data/cinder/jingh-test-volume`。
 
 `create_mountpoint`就是创建挂载目录:
 
@@ -533,7 +533,7 @@ REX-Ray是一个EMC团队领导的开源项目，为Docker、Mesos及其他容�
 6. [Rex-Ray](https://rexray.readthedocs.io/en/stable/).
 7. [fuxi](https://github.com/openstack/fuxi).
 8. [Cinder: failed to attach volume while using cinder driver](https://github.com/codedellemc/rexray/issues/922).
-9. [OpenStack中那些很少见但很有用的操作](http://int32bit.me/2017/09/25/OpenStack%E4%B8%AD%E9%82%A3%E4%BA%9B%E5%B0%91%E8%A7%81%E4%BD%86%E5%BE%88%E6%9C%89%E7%94%A8%E7%9A%84%E6%93%8D%E4%BD%9C/).
-10. [OpenStack虚拟机挂载数据卷过程分析](http://int32bit.me/2017/09/08/OpenStack%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%8C%82%E8%BD%BD%E6%95%B0%E6%8D%AE%E5%8D%B7%E8%BF%87%E7%A8%8B%E5%88%86%E6%9E%90/).
+9. [OpenStack中那些很少见但很有用的操作](http://jingh.me/2017/09/25/OpenStack%E4%B8%AD%E9%82%A3%E4%BA%9B%E5%B0%91%E8%A7%81%E4%BD%86%E5%BE%88%E6%9C%89%E7%94%A8%E7%9A%84%E6%93%8D%E4%BD%9C/).
+10. [OpenStack虚拟机挂载数据卷过程分析](http://jingh.me/2017/09/08/OpenStack%E8%99%9A%E6%8B%9F%E6%9C%BA%E6%8C%82%E8%BD%BD%E6%95%B0%E6%8D%AE%E5%8D%B7%E8%BF%87%E7%A8%8B%E5%88%86%E6%9E%90/).
 
 **中秋节快乐!**

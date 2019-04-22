@@ -21,15 +21,15 @@ reclaim_instance_interval = 120
 
 此时虚拟机执行普通删除操作时，nova不会立即删除虚拟机，而是会等待两分钟的时间，在此时间间隔内，管理员可以随时恢复虚拟机，只有在超过120秒后虚拟机才会真正执行删除操作，不可恢复。
 
-为了演示该功能，我们删除一台虚拟机`int32bit-test-2`:
+为了演示该功能，我们删除一台虚拟机`jingh-test-2`:
 
 ```
 # nova list
 +--------------------------------------+-----------------+--------+------------+-------------+-------------------+
 | ID                                   | Name            | Status | Task State | Power State | Networks          |
 +--------------------------------------+-----------------+--------+------------+-------------+-------------------+
-| 8f082394-ffd2-47db-9837-a8cbd1e011a1 | int32bit-test-1 | ACTIVE | -          | Running     | private=10.0.0.6  |
-| 9ef2eea4-77dc-4994-a2d3-a7bc59400d22 | int32bit-test-2 | ACTIVE | -          | Running     | private=10.0.0.13 |
+| 8f082394-ffd2-47db-9837-a8cbd1e011a1 | jingh-test-1 | ACTIVE | -          | Running     | private=10.0.0.6  |
+| 9ef2eea4-77dc-4994-a2d3-a7bc59400d22 | jingh-test-2 | ACTIVE | -          | Running     | private=10.0.0.13 |
 +--------------------------------------+-----------------+--------+------------+-------------+-------------------+
 # nova delete 9ef2eea4-77dc-4994-a2d3-a7bc59400d22
 Request to delete server 9ef2eea4-77dc-4994-a2d3-a7bc59400d22 has been accepted.
@@ -39,7 +39,7 @@ Request to delete server 9ef2eea4-77dc-4994-a2d3-a7bc59400d22 has been accepted.
 
 ```
 # nova list --deleted | grep -i soft_delete
-| 9ef2eea4-77dc-4994-a2d3-a7bc59400d22 | int32bit-test-2 | SOFT_DELETED | -          | Shutdown    | private=10.0.0.13 |
+| 9ef2eea4-77dc-4994-a2d3-a7bc59400d22 | jingh-test-2 | SOFT_DELETED | -          | Shutdown    | private=10.0.0.13 |
 ```
 
 通过`nova restore`命令可以恢复虚拟机：
@@ -50,8 +50,8 @@ Request to delete server 9ef2eea4-77dc-4994-a2d3-a7bc59400d22 has been accepted.
 +--------------------------------------+-----------------+--------+------------+-------------+-------------------+
 | ID                                   | Name            | Status | Task State | Power State | Networks          |
 +--------------------------------------+-----------------+--------+------------+-------------+-------------------+
-| 8f082394-ffd2-47db-9837-a8cbd1e011a1 | int32bit-test-1 | ACTIVE | -          | Running     | private=10.0.0.6  |
-| 9ef2eea4-77dc-4994-a2d3-a7bc59400d22 | int32bit-test-2 | ACTIVE | -          | Running     | private=10.0.0.13 |
+| 8f082394-ffd2-47db-9837-a8cbd1e011a1 | jingh-test-1 | ACTIVE | -          | Running     | private=10.0.0.6  |
+| 9ef2eea4-77dc-4994-a2d3-a7bc59400d22 | jingh-test-2 | ACTIVE | -          | Running     | private=10.0.0.13 |
 +--------------------------------------+-----------------+--------+------------+-------------+-------------------+
 ```
 
@@ -276,7 +276,7 @@ nova flavor-key m1.xlarge.pinned set \
 使用新创建的Flavor创建虚拟机:
 
 ```sh
-nova boot  int32bit-test-pinning \
+nova boot  jingh-test-pinning \
 	--flavor m1.xlarge.pinned  \
 	--image 16b79884-77f2-44f5-a6d7-6fcc30651283\
 	--nic net-id=ed88dc5a-61d8-4f99-9532-8c68e5ec5b9e
@@ -508,7 +508,7 @@ mkinitrd
 
 ### 5.1 qemu-guest-agent简介
 
-我们都知道OpenStack虚拟机启动时是通过cloud-init完成初始化配置的，比如网卡配置、主机名配置、注入用户密码等。而虚拟机启动之后处于运行状态时，外部如何与虚拟机通信呢，这就是qemu-guest-agent要完成的事，这其实在[如何构建OpenStack镜像](http://int32bit.me/2016/05/28/%E5%A6%82%E4%BD%95%E6%9E%84%E5%BB%BAOpenStack%E9%95%9C%E5%83%8F/)一文中已经介绍过，这里直接搬过来。
+我们都知道OpenStack虚拟机启动时是通过cloud-init完成初始化配置的，比如网卡配置、主机名配置、注入用户密码等。而虚拟机启动之后处于运行状态时，外部如何与虚拟机通信呢，这就是qemu-guest-agent要完成的事，这其实在[如何构建OpenStack镜像](http://jingh.me/2016/05/28/%E5%A6%82%E4%BD%95%E6%9E%84%E5%BB%BAOpenStack%E9%95%9C%E5%83%8F/)一文中已经介绍过，这里直接搬过来。
 
 qemu-guest-agent是运行在虚拟机的一个daemon服务，libvirt会在宿主机本地创建一个unix socket，并模拟为虚拟机内部的一个串口设备，从而实现了宿主机与虚拟机通信，这种方式不依赖于TCP/IP网络。
 

@@ -238,8 +238,8 @@ u'network_type': u'vlan'}
 
 * [nova boot代码流程分析(四)：nova与neutron的l2 agent(neutron-linuxbridge-agent)交互][1]
 * [nova boot代码流程分析(五)：VM启动从neutron-dhcp-agent获取IP与MAC][2]
-* [http://int32bit.me/2017/11/23/OpenStack%E4%BD%BF%E7%94%A8Ceph%E5%AD%98%E5%82%A8-Ceph%E5%88%B0%E5%BA%95%E5%81%9A%E4%BA%86%E4%BB%80%E4%B9%88/][3]
+* [http://jingh.me/2017/11/23/OpenStack%E4%BD%BF%E7%94%A8Ceph%E5%AD%98%E5%82%A8-Ceph%E5%88%B0%E5%BA%95%E5%81%9A%E4%BA%86%E4%BB%80%E4%B9%88/][3]
 
 [1]: http://www.aichengxu.com/linux/9307663.htm
 [2]: https://blog.csdn.net/gj19890923/article/details/51558598
-[3]: http://int32bit.me/2017/11/23/OpenStack%E4%BD%BF%E7%94%A8Ceph%E5%AD%98%E5%82%A8-Ceph%E5%88%B0%E5%BA%95%E5%81%9A%E4%BA%86%E4%BB%80%E4%B9%88/
+[3]: http://jingh.me/2017/11/23/OpenStack%E4%BD%BF%E7%94%A8Ceph%E5%AD%98%E5%82%A8-Ceph%E5%88%B0%E5%BA%95%E5%81%9A%E4%BA%86%E4%BB%80%E4%B9%88/

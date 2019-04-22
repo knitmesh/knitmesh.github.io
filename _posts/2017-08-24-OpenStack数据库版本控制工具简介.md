@@ -34,7 +34,7 @@ SQLAlchemy Migrate最开始叫Migrate，它最初是从Evan Rosson参加的[Goog
 SQLALchemy Migrate的CLI工具为`migrate`，其用法如下：
 
 ```
-int32bit $ migrate -h
+jingh $ migrate -h
 Usage: migrate COMMAND ...
 
     Available commands:
@@ -66,48 +66,48 @@ Options:
                         Use this option to disable logging configuration
 ```
 
-首先我们为我们的项目创建一个repo，命名为int32bit，路径为`/tmp/int32bit`:
+首先我们为我们的项目创建一个repo，命名为jingh，路径为`/tmp/jingh`:
 
 ```
-$ migrate create /tmp/int32bit int32bit
+$ migrate create /tmp/jingh jingh
 ```
 
-此时会创建/tmp/int32bit目录，目录结构如下：
+此时会创建/tmp/jingh目录，目录结构如下：
 
 ```
-find int32bit/ | grep -v ".*\.pyc"
-int32bit/
-int32bit/README
-int32bit/migrate.cfg
-int32bit/__init__.py
-int32bit/manage.py
-int32bit/versions
-int32bit/versions/__init__.py
+find jingh/ | grep -v ".*\.pyc"
+jingh/
+jingh/README
+jingh/migrate.cfg
+jingh/__init__.py
+jingh/manage.py
+jingh/versions
+jingh/versions/__init__.py
 ```
 创建repo后，需要指定数据库保存repo信息，我们以mysql数据库为例：
 
 ```
-python manage.py version_control 'mysql://int32bit:int32bit@localhost/int32bit?charset=utf8' /tmp/int32bit
+python manage.py version_control 'mysql://jingh:jingh@localhost/jingh?charset=utf8' /tmp/jingh
 ```
 
 注意mysql连接的协议格式为`mysql://${username}:${password}@${host}/${database}?var1=xx`。
 
-此时查看int32bit数据库：
+此时查看jingh数据库：
 
 ```
-MariaDB [int32bit]> show tables;
+MariaDB [jingh]> show tables;
 +--------------------+
-| Tables_in_int32bit |
+| Tables_in_jingh |
 +--------------------+
 | migrate_version    |
 +--------------------+
 1 row in set (0.00 sec)
 
-MariaDB [int32bit]> select * from migrate_version;
+MariaDB [jingh]> select * from migrate_version;
 +---------------+-----------------+---------+
 | repository_id | repository_path | version |
 +---------------+-----------------+---------+
-| int32bit      | /tmp/int32bit   |       0 |
+| jingh      | /tmp/jingh   |       0 |
 +---------------+-----------------+---------+
 1 row in set (0.00 sec)
 ```
@@ -117,13 +117,13 @@ MariaDB [int32bit]> select * from migrate_version;
 查看当前版本：
 
 ```
-python /tmp/int32bit/manage.py db_version --url='mysql://int32bit:int32bit@localhost/int32bit?charset=utf8' /tmp/int32bit
+python /tmp/jingh/manage.py db_version --url='mysql://jingh:jingh@localhost/jingh?charset=utf8' /tmp/jingh
 ```
 
 每次都要输入数据库连接信息以及repo路径非常麻烦，我们可以写到初始化脚本中：
 
 ```
-migrate manage manage.py --repository=/tmp/int32bit --url='mysql://int32bit:int32bit@localhost/int32bit?charset=utf8'
+migrate manage manage.py --repository=/tmp/jingh --url='mysql://jingh:jingh@localhost/jingh?charset=utf8'
 ```
 
 此时查看manager.py代码，已经把数据库信息和repo路径写到初始化参数中。
@@ -133,7 +133,7 @@ migrate manage manage.py --repository=/tmp/int32bit --url='mysql://int32bit:int3
 from migrate.versioning.shell import main
 
 if __name__ == '__main__':
-    main(url='mysql://int32bit:int32bit@localhost/int32bit?charset=utf8', debug='False', repository='/tmp/int32bit')
+    main(url='mysql://jingh:jingh@localhost/jingh?charset=utf8', debug='False', repository='/tmp/jingh')
 ```
 
 **注意:**我们这里只是作为测试用途，实际生产环境不建议把数据库信息写到代码中。
@@ -141,8 +141,8 @@ if __name__ == '__main__':
 此时只需要执行manage.py即可:
 
 ```
-int32bit $ chmod +x manage.py
-int32bit $ ./manage.py db_version
+jingh $ chmod +x manage.py
+jingh $ ./manage.py db_version
 0
 ```
 
@@ -167,7 +167,7 @@ account = Table(
 此时在`versions`目录会自动创建一个`001_Add_account_table.py`文件：
 
 ```
-int32bit $ ls
+jingh $ ls
 001_Add_account_table.py  __init__.py  __init__.pyc
 ```
 
@@ -236,7 +236,7 @@ Success
 测试OK后，我们可以执行变更执行数据库0->1了:
 
 ```
-int32bit $ ./manage.py upgrade
+jingh $ ./manage.py upgrade
 0 -> 1...
 done
 ```
@@ -244,23 +244,23 @@ done
 测试查看当前版本:
 
 ```
-int32bit $ ./manage.py db_version
+jingh $ ./manage.py db_version
 1
 ```
 
 检查我们的accout表是否创建：
 
 ```
-MariaDB [int32bit]> show tables;
+MariaDB [jingh]> show tables;
 +--------------------+
-| Tables_in_int32bit |
+| Tables_in_jingh |
 +--------------------+
 | account            |
 | migrate_version    |
 +--------------------+
 2 rows in set (0.00 sec)
 
-MariaDB [int32bit]> desc account;
+MariaDB [jingh]> desc account;
 +--------+-------------+------+-----+---------+----------------+
 | Field  | Type        | Null | Key | Default | Extra          |
 +--------+-------------+------+-----+---------+----------------+
@@ -270,7 +270,7 @@ MariaDB [int32bit]> desc account;
 +--------+-------------+------+-----+---------+----------------+
 3 rows in set (0.00 sec)
 
-MariaDB [int32bit]>
+MariaDB [jingh]>
 ```
 
 从结果看，`account`表已经创建好了。
@@ -303,17 +303,17 @@ def downgrade(migrate_engine):
 执行变更升级到版本2:
 
 ```
-int32bit $ ./manage.py upgrade
+jingh $ ./manage.py upgrade
 1 -> 2...
 done
-int32bit $ ./manage.py db_version
+jingh $ ./manage.py db_version
 2
 ```
 
 此时查看`account`表：
 
 ```
-MariaDB [int32bit]> desc account;
+MariaDB [jingh]> desc account;
 +--------+--------------+------+-----+---------+----------------+
 | Field  | Type         | Null | Key | Default | Extra          |
 +--------+--------------+------+-----+---------+----------------+
@@ -330,17 +330,17 @@ MariaDB [int32bit]> desc account;
 假设我们项目升级失败了，需要回滚到版本1，数据库当然也需要回滚，执行以下命令降级数据库版本到1:
 
 ```
-int32bit $ ./manage.py  downgrade 1
+jingh $ ./manage.py  downgrade 1
 2 -> 1...
 done
-int32bit $ ./manage.py db_version
+jingh $ ./manage.py db_version
 1
 ```
 
 查看`account`表：
 
 ```
-MariaDB [int32bit]> desc account;
+MariaDB [jingh]> desc account;
 +--------+-------------+------+-----+---------+----------------+
 | Field  | Type        | Null | Key | Default | Extra          |
 +--------+-------------+------+-----+---------+----------------+
@@ -413,15 +413,15 @@ alembic是由sqlalchemy作者[Mike Bayer](http://techspot.zzzeek.org/)开发的�
 和migrate一样，首先需要创建一个repo:
 
 ```
-$ alembic init int32bit
-  Creating directory /tmp/int32bit ... done
-  Creating directory /tmp/int32bit/versions ... done
-  Generating /tmp/int32bit/env.py ... done
-  Generating /tmp/int32bit/env.pyc ... done
+$ alembic init jingh
+  Creating directory /tmp/jingh ... done
+  Creating directory /tmp/jingh/versions ... done
+  Generating /tmp/jingh/env.py ... done
+  Generating /tmp/jingh/env.pyc ... done
   Generating /tmp/alembic.ini ... done
-  Generating /tmp/int32bit/script.py.mako ... done
-  Generating /tmp/int32bit/env.pyo ... done
-  Generating /tmp/int32bit/README ... done
+  Generating /tmp/jingh/script.py.mako ... done
+  Generating /tmp/jingh/env.pyo ... done
+  Generating /tmp/jingh/README ... done
   Please edit configuration/connection/logging settings in '/tmp/alembic.ini' before proceeding.
 ```
 
@@ -432,7 +432,7 @@ alembic支持多种模板，以上我们没有指定模板，因此使用的是�
 ```
 [alembic]
 ...
-sqlalchemy.url = mysql://int32bit:int32bit@lb.0.example.polex.io/int32bit?charset=utf8
+sqlalchemy.url = mysql://jingh:jingh@lb.0.example.polex.io/jingh?charset=utf8
 ...
 ```
 
@@ -440,12 +440,12 @@ sqlalchemy.url = mysql://int32bit:int32bit@lb.0.example.polex.io/int32bit?charse
 
 ```
 $ alembic revision -m "create account table"
-  Generating /tmp/int32bit/versions/30aaeaf5a3d7_create_account_table.py ... done
+  Generating /tmp/jingh/versions/30aaeaf5a3d7_create_account_table.py ... done
 ```
 
 和migrate一样，自动生成了变更脚本`30aaeaf5a3d7_create_account_table.py`，不过并不是通过数字版本区分的。
 
-你可以直接编辑`/tmp/int32bit/versions/30aaeaf5a3d7_create_account_table.py`文件，也可以使用`alembic edit head`编辑文件，它会调用环境变量`EDITOR`指定的编辑器打开文件。文件内容如下:
+你可以直接编辑`/tmp/jingh/versions/30aaeaf5a3d7_create_account_table.py`文件，也可以使用`alembic edit head`编辑文件，它会调用环境变量`EDITOR`指定的编辑器打开文件。文件内容如下:
 
 ```
 """create account table
@@ -506,10 +506,10 @@ INFO  [alembic.runtime.migration] Running upgrade  -> 30aaeaf5a3d7, create accou
 $ alembic current -v
 INFO  [alembic.runtime.migration] Context impl MySQLImpl.
 INFO  [alembic.runtime.migration] Will assume non-transactional DDL.
-Current revision(s) for mysql://int32bit:XXXXX@lb.0.example.polex.io/int32bit?charset=utf8:
+Current revision(s) for mysql://jingh:XXXXX@lb.0.example.polex.io/jingh?charset=utf8:
 Rev: 30aaeaf5a3d7 (head)
 Parent: <base>
-Path: /tmp/int32bit/versions/30aaeaf5a3d7_create_account_table.py
+Path: /tmp/jingh/versions/30aaeaf5a3d7_create_account_table.py
 
     create account table
 
@@ -522,7 +522,7 @@ Path: /tmp/int32bit/versions/30aaeaf5a3d7_create_account_table.py
 
 ```
 $ alembic revision -m "Add a email column to account table"
-  Generating /tmp/int32bit/versions/52a265aec608_add_a_email_column_to_account_table.py ... done
+  Generating /tmp/jingh/versions/52a265aec608_add_a_email_column_to_account_table.py ... done
 ```
 
 实现`upgrade`和`downgrade`方法如下:
@@ -595,7 +595,7 @@ $ alembic branches -v
 Rev: 30aaeaf5a3d7 (branchpoint)
 Parent: <base>
 Branches into: 98fd632fd10, 52a265aec608
-Path: /tmp/int32bit/versions/30aaeaf5a3d7_create_account_table.py
+Path: /tmp/jingh/versions/30aaeaf5a3d7_create_account_table.py
 
     create account table
 
@@ -651,7 +651,7 @@ ERROR [alembic.util.messaging] Multiple head revisions are present for given arg
 ```
 $ alembic merge -m "merge 52a and 98f" 52a 98f
 
-  Generating /tmp/int32bit/versions/2be18dbd38c3_merge_52a_and_98f.py ... done
+  Generating /tmp/jingh/versions/2be18dbd38c3_merge_52a_and_98f.py ... done
 ```
 
 此时我们的`head`只有一个了:

@@ -26,60 +26,60 @@ rbd snap create openstack/test-image@test-snap
 在`openstack` pool上创建一个1G的image命令为:
 
 ```
-rbd -p openstack create --size 1024 int32bit-test-1
+rbd -p openstack create --size 1024 jingh-test-1
 ```
 
 image支持快照(snapshot)的功能，创建一个快照即保存当前image的状态，相当于`git commit`操作，用户可以随时把image回滚到任意快照点上(`git reset`)。创建快照命令如下:
 
 ```sh
-rbd -p openstack snap create int32bit-test-1@snap-1
+rbd -p openstack snap create jingh-test-1@snap-1
 ```
 
 查看rbd列表:
 
 ```
-$ rbd -p openstack ls -l | grep int32bit-test
-int32bit-test-1        1024M 2
-int32bit-test-1@snap-1 1024M 2
+$ rbd -p openstack ls -l | grep jingh-test
+jingh-test-1        1024M 2
+jingh-test-1@snap-1 1024M 2
 ```
 
 基于快照可以创建一个新的image，称为clone，clone不会立即复制原来的image，而是使用COW策略，即写时拷贝，只有当需要写入一个对象时，才从parent中拷贝那个对象到本地，因此clone操作基本秒级完成，并且需要注意的是基于同一个快照创建的所有image共享快照之前的image数据，因此在clone之前我们必须保护(protect)快照，被保护的快照不允许删除。clone操作类似于`git branch`操作，clone一个image命令如下:
 
 ```sh
-rbd -p openstack snap protect int32bit-test-1@snap-1
-rbd -p openstack clone int32bit-test-1@snap-1 int32bit-test-2
+rbd -p openstack snap protect jingh-test-1@snap-1
+rbd -p openstack clone jingh-test-1@snap-1 jingh-test-2
 ```
 
 我们可以查看一个image的子image(children)有哪些，也能查看一个image是基于哪个image clone的(parent)：
 
 ```
-$ rbd -p openstack children int32bit-test-1@snap-1
-openstack/int32bit-test-2
-$ rbd -p openstack info int32bit-test-2 | grep parent
-parent: openstack/int32bit-test-1@snap-1
+$ rbd -p openstack children jingh-test-1@snap-1
+openstack/jingh-test-2
+$ rbd -p openstack info jingh-test-2 | grep parent
+parent: openstack/jingh-test-1@snap-1
 ```
 
-以上我们可以发现`int32bit-test-2`是`int32bit-test-1`的children，而`int32bit-test-1`是`int32bit-test-2`的parent。
+以上我们可以发现`jingh-test-2`是`jingh-test-1`的children，而`jingh-test-1`是`jingh-test-2`的parent。
 
 不断地创建快照并clone image，就会形成一条很长的image链，链很长时，不仅会影响读写性能，还会导致管理非常麻烦。可幸的是Ceph支持合并链上的所有image为一个独立的image，这个操作称为`flatten`，类似于`git merge`操作，`flatten`需要一层一层拷贝所有顶层不存在的数据，因此通常会非常耗时。
 
 ```
-$ rbd -p openstack flatten int32bit-test-2
+$ rbd -p openstack flatten jingh-test-2
 Image flatten: 31% complete...
 ```
 
 此时我们再次查看其parrent-children关系:
 
 ```
-rbd -p openstack children int32bit-test-1@snap-1
+rbd -p openstack children jingh-test-1@snap-1
 ```
 
-此时`int32bit-test-1`没有children了，`int32bit-test-2`完全独立了。
+此时`jingh-test-1`没有children了，`jingh-test-2`完全独立了。
 
 当然Ceph也支持完全拷贝，称为`copy`：
 
 ```
-rbd -p openstack cp int32bit-test-1 int32bit-test-3
+rbd -p openstack cp jingh-test-1 jingh-test-3
 ```
 
 `copy`会完全拷贝一个image，因此会非常耗时，但注意`copy`不会拷贝原来的快照信息。
@@ -87,13 +87,13 @@ rbd -p openstack cp int32bit-test-1 int32bit-test-3
 Ceph支持将一个RBD image导出(`export`):
 
 ```
-rbd -p openstack export int32bit-test-1 int32bit-1.raw
+rbd -p openstack export jingh-test-1 jingh-1.raw
 ```
 
 导出会把整个image导出，Ceph还支持差量导出(export-diff)，即指定从某个快照点开始导出：
 
 ```
-rbd -p openstack export-diff int32bit-test-1 --from-snap snap-1 --snap snap-2 int32bit-test-1-diff.raw
+rbd -p openstack export-diff jingh-test-1 --from-snap snap-1 --snap snap-2 jingh-test-1-diff.raw
 ```
 
 以上导出从快照点`snap-1`到快照点`snap-2`的数据。
@@ -103,9 +103,9 @@ rbd -p openstack export-diff int32bit-test-1 --from-snap snap-1 --snap snap-2 in
 Rbd image是动态分配存储空间，通过`du`命令可以查看image实际占用的物理存储空间:
 
 ```
-$ rbd du int32bit-test-1
+$ rbd du jingh-test-1
 NAME            PROVISIONED   USED
-int32bit-test-1       1024M 12288k
+jingh-test-1       1024M 12288k
 ```
 
 以上image分配的大小为1024M，实际占用的空间为12288KB。
@@ -113,9 +113,9 @@ int32bit-test-1       1024M 12288k
 删除image，注意必须先删除其所有快照，并且保证没有依赖的children:
 
 ```
-rbd -p openstack snap unprotect int32bit-test-1@snap-1
-rbd -p openstack snap rm int32bit-test-1@snap-1
-rbd -p openstack rm int32bit-test-1
+rbd -p openstack snap unprotect jingh-test-1@snap-1
+rbd -p openstack snap rm jingh-test-1@snap-1
+rbd -p openstack rm jingh-test-1
 ```
 
 ### 1.2 OpenStack简介
@@ -248,7 +248,7 @@ rbd -p openstack snap protect d1a06da9-8ccd-4d3e-9b63-6dcd3ead29e6@snap
 我们可以通过rbd命令验证:
 
 ```
-int32bit rbd ls -l | grep d1a06da9-8ccd-4d3e-9b63-6dcd3ead29e6
+jingh rbd ls -l | grep d1a06da9-8ccd-4d3e-9b63-6dcd3ead29e6
 d1a06da9-8ccd-4d3e-9b63-6dcd3ead29e6      40162k  2
 d1a06da9-8ccd-4d3e-9b63-6dcd3ead29e6@snap 40162k  2 yes
 ```
@@ -457,9 +457,9 @@ openstack/cbf44290-f142-41f8-86e1-d63c902b38ed_disk
 我们进一步验证:
 
 ```
-int32bit $ rbd -p openstack ls | grep cbf44290-f142-41f8-86e1-d63c902b38ed
+jingh $ rbd -p openstack ls | grep cbf44290-f142-41f8-86e1-d63c902b38ed
 cbf44290-f142-41f8-86e1-d63c902b38ed_disk
-int32bit $ rbd -p openstack info cbf44290-f142-41f8-86e1-d63c902b38ed_disk
+jingh $ rbd -p openstack info cbf44290-f142-41f8-86e1-d63c902b38ed_disk
 rbd image 'cbf44290-f142-41f8-86e1-d63c902b38ed_disk':
         size 2048 MB in 256 objects
         order 23 (8192 kB objects)
@@ -786,7 +786,7 @@ volume-bf2d1c54-6c98-4a78-9c20-3e8ea033c3db
 我们可以通过rbd命令验证:
 
 ```
-int32bit $ rbd -p openstack ls | grep bf2d1c54-6c98-4a78-9c20-3e8ea033c3db
+jingh $ rbd -p openstack ls | grep bf2d1c54-6c98-4a78-9c20-3e8ea033c3db
 volume-bf2d1c54-6c98-4a78-9c20-3e8ea033c3db
 ```
 
@@ -942,7 +942,7 @@ fi
 当`rbd_max_clone_depth > 0`且`depth < rbd_max_clone_depth`时，通过rbd命令验证:
 
 ```
-int32bit $ rbd info volume-3b8b15a4-3020-41a0-80be-afaa35ed5eef
+jingh $ rbd info volume-3b8b15a4-3020-41a0-80be-afaa35ed5eef
 rbd image 'volume-3b8b15a4-3020-41a0-80be-afaa35ed5eef':
         size 1024 MB in 256 objects
         order 22 (4096 kB objects)
@@ -1015,7 +1015,7 @@ fi
 通过rbd命令验证如下:
 
 ```sh
-int32bit $ rbd info openstack/volume-87ee1ec6-3fe4-413b-a4c0-8ec7756bf1b4
+jingh $ rbd info openstack/volume-87ee1ec6-3fe4-413b-a4c0-8ec7756bf1b4
 rbd image 'volume-87ee1ec6-3fe4-413b-a4c0-8ec7756bf1b4':
         size 3072 MB in 768 objects
         order 22 (4096 kB objects)
@@ -1072,7 +1072,7 @@ volume-bf2d1c54-6c98-4a78-9c20-3e8ea033c3db@snapshot-e4e534fc-420b-45c6-8e9f-b23
 
 ### 4.4 创建volume备份
 
-在了解volume备份之前，首先需要理清快照和备份的区别。我们可以通过`git`类比，快照类似`git commit`操作，只是表明数据提交了，主要用于回溯与回滚。当集群奔溃导致数据丢失，通常不能从快照中完全恢复数据。而备份则类似于`git push`，把数据安全推送到了远端存储系统中，主要用于保证数据安全，即使本地数据丢失，也能从备份中恢复。Cinder的磁盘备份也支持多种存储后端，这里我们只考虑volume和backup driver都是Ceph的情况，其它细节可以参考[Cinder数据卷备份原理与实践](http://int32bit.me/2017/03/30/Cinder%E6%95%B0%E6%8D%AE%E5%8D%B7%E5%A4%87%E4%BB%BD%E5%8E%9F%E7%90%86%E5%92%8C%E5%AE%9E%E8%B7%B5/)。生产中volume和backup必须使用不同的Ceph集群，这样才能保证当volume ceph集群挂了，也能从另一个集群中快速恢复数据。本文只是为了测试功能，因此使用的是同一个Ceph集群，通过pool区分，volume使用`openstack`pool，而backup使用`cinder_backup`pool。
+在了解volume备份之前，首先需要理清快照和备份的区别。我们可以通过`git`类比，快照类似`git commit`操作，只是表明数据提交了，主要用于回溯与回滚。当集群奔溃导致数据丢失，通常不能从快照中完全恢复数据。而备份则类似于`git push`，把数据安全推送到了远端存储系统中，主要用于保证数据安全，即使本地数据丢失，也能从备份中恢复。Cinder的磁盘备份也支持多种存储后端，这里我们只考虑volume和backup driver都是Ceph的情况，其它细节可以参考[Cinder数据卷备份原理与实践](http://jingh.me/2017/03/30/Cinder%E6%95%B0%E6%8D%AE%E5%8D%B7%E5%A4%87%E4%BB%BD%E5%8E%9F%E7%90%86%E5%92%8C%E5%AE%9E%E8%B7%B5/)。生产中volume和backup必须使用不同的Ceph集群，这样才能保证当volume ceph集群挂了，也能从另一个集群中快速恢复数据。本文只是为了测试功能，因此使用的是同一个Ceph集群，通过pool区分，volume使用`openstack`pool，而backup使用`cinder_backup`pool。
 
 另外，Cinder支持增量备份，用户可以指定`--incremental`参数决定使用的是全量备份还是增量备份。但是对于Ceph后端来说，Cinder总是先尝试执行增量备份，只有当增量备份失败时，才会fallback到全量备份，而不管用户有没有指定`--incremental`参数。尽管如此，我们仍然把备份分为全量备份和增量备份两种情况，注意只有第一次备份才有可能是全量备份，剩下的备份都是增量备份。
 
@@ -1201,11 +1201,11 @@ rbd export-diff --pool openstack ${new_snap} - \
 
 ```sh
 # volume ceph cluster
-int32bit $ rbd -p openstack snap ls volume-075c06ed-37e2-407d-b998-e270c4edc53c
+jingh $ rbd -p openstack snap ls volume-075c06ed-37e2-407d-b998-e270c4edc53c
 SNAPID NAME                                                              SIZE TIMESTAMP
     52 backup.db563496-0c15-4349-95f3-fc5194bfb11a.snap.1511344566.67 1024 MB Wed Nov 22 17:56:15 2017
 # backup ceph cluster
-int32bit $ rbd -p cinder_backup ls -l
+jingh $ rbd -p cinder_backup ls -l
 NAME                                                                                                                    SIZE PARENT FMT PROT LOCK
 volume-075c06ed-37e2-407d-b998-e270c4edc53c.backup.base                                                                1024M 2
 volume-075c06ed-37e2-407d-b998-e270c4edc53c.backup.base@backup.db563496-0c15-4349-95f3-fc5194bfb11a.snap.1511344566.67 1024M  2
@@ -1276,10 +1276,10 @@ volume-${VOLUME_ID}.backup.base@backup.${PARENT_ID}.snap.1511344566.67
 我们通过rbd命令验证如下:
 
 ```sh
-int32bit $ rbd -p openstack snap ls volume-075c06ed-37e2-407d-b998-e270c4edc53c
+jingh $ rbd -p openstack snap ls volume-075c06ed-37e2-407d-b998-e270c4edc53c
 SNAPID NAME                                                              SIZE TIMESTAMP
     53 backup.e3db9e85-d352-47e2-bced-5bad68da853b.snap.1511348180.27 1024 MB Wed Nov 22 18:56:20 2017
-int32bit $ rbd -p cinder_backup ls -l
+jingh $ rbd -p cinder_backup ls -l
 NAME                                                                                                                    SIZE PARENT FMT PROT LOCK
 volume-075c06ed-37e2-407d-b998-e270c4edc53c.backup.base                                                                1024M          2
 volume-075c06ed-37e2-407d-b998-e270c4edc53c.backup.base@backup.db563496-0c15-4349-95f3-fc5194bfb11a.snap.1511344566.67 1024M          2
@@ -1345,7 +1345,7 @@ restore to a new volume (default).
 这里假定我们恢复到空卷中，命令如下:
 
 ```sh
-cinder backup-restore --name int32bit-restore-1 \
+cinder backup-restore --name jingh-restore-1 \
 e3db9e85-d352-47e2-bced-5bad68da853b
 ```
 

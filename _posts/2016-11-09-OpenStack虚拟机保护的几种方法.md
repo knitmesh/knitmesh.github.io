@@ -73,7 +73,7 @@ def check_instance_lock(function):
 
 ```
 $ nova list | grep c6fd7a92-bf51-4000-b9e1-18850090ab47
-| c6fd7a92-bf51-4000-b9e1-18850090ab47 | int32bit-test-3 | ACTIVE | -          | Running     | rally-shared-net=10.168.0.18 |
+| c6fd7a92-bf51-4000-b9e1-18850090ab47 | jingh-test-3 | ACTIVE | -          | Running     | rally-shared-net=10.168.0.18 |
 ```
 
 然后执行删除操作:
@@ -86,7 +86,7 @@ nova delete c6fd7a92-bf51-4000-b9e1-18850090ab47
 
 ```
 $ nova list --deleted | grep c6fd7a92-bf51-4000-b9e1-18850090ab47
-| c6fd7a92-bf51-4000-b9e1-18850090ab47 | int32bit-test-3| SOFT_DELETED | - |Shutdown| rally-shared-net=10.168.0.18|
+| c6fd7a92-bf51-4000-b9e1-18850090ab47 | jingh-test-3| SOFT_DELETED | - |Shutdown| rally-shared-net=10.168.0.18|
 ```
 
 可见虚拟机此时为`SOFT_DELETED`状态，此时我们可以使用`nova restore`操作恢复:

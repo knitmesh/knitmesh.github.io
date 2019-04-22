@@ -14,6 +14,6 @@ Linuxer, Vimer, UNIX信徒,喜欢技术分享、讨论，专注于云计算、�
 
 由于个人知识水平有限，难免会出现错误，如果发现有问题，请随时在评论或者通过邮件告诉我，避免误导更多的人。 更多的吐槽可以关注我的微博。
 
-本站目前托管在github page中，你可以在<a href="https://github.com/int32bit/knitmesh.github.io">github</a>中查看本站完整源码，本站所使用的主题框架Fork自<a href="https://github.com/Huxpro/huxpro.github.io">Huxpro</a>并做了部分调整。
+本站目前托管在github page中，你可以在<a href="https://github.com/jingh/knitmesh.github.io">github</a>中查看本站完整源码，本站所使用的主题框架Fork自<a href="https://github.com/Huxpro/huxpro.github.io">Huxpro</a>并做了部分调整。
 
 

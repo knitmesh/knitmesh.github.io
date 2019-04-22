@@ -54,7 +54,7 @@ POOLS:
     NAME              ID     USED     %USED     MAX AVAIL     OBJECTS
     openstack         5      169M      0.07          235G          81
     rbd               6         0         0          235G           0
-    int32bit-test     8      1040         0          235G          18
+    jingh-test     8      1040         0          235G          18
 [root@server-31 ceph]# ceph --cluster server-32 df
 GLOBAL:
     SIZE     AVAIL     RAW USED     %RAW USED
@@ -62,7 +62,7 @@ GLOBAL:
 POOLS:
     NAME              ID     USED     %USED     MAX AVAIL     OBJECTS
     rbd               10      114         0          243G           4
-    int32bit-test     13      228         0          243G          10
+    jingh-test     13      228         0          243G          10
 ```
 
 开启journaling功能，可以在创建RBD image时通过`--image-feature`参数指定，也可以通过配置文件设置默认开启的features，features通过一个无符号长整型数的位标识，参考[CEPH RBD Features](https://github.com/ceph/ceph/blob/60c008d4df1b9eb5307dc8336a0d9bb0562aabd2/src/include/rbd/features.h#L4-L11)，代码如下:
@@ -110,28 +110,28 @@ RBD mirror既可以针对一个pool进行配置，此时pool的每一个image都
 首先在31、32节点上创建两个相同的pool:
 
 ```
-ceph --cluster server-31 osd pool create int32bit-test 64 64
-ceph --cluster server-32 osd pool create int32bit-test 64 64
+ceph --cluster server-31 osd pool create jingh-test 64 64
+ceph --cluster server-32 osd pool create jingh-test 64 64
 ```
 
 开启pool mirror功能:
 
 ```
-rbd --cluster server-31 mirror pool enable int32bit-test pool
-rbd --cluster server-32 mirror pool enable int32bit-test pool
+rbd --cluster server-31 mirror pool enable jingh-test pool
+rbd --cluster server-32 mirror pool enable jingh-test pool
 ```
 
 分别设置peer集群，即需要同步的目标集群，这里我们设置他们互为peer:
 
 ```
-rbd --cluster server-31 mirror pool peer add int32bit-test client.admin@server-32
-rbd --cluster server-32 mirror pool peer add int32bit-test client.admin@server-31
+rbd --cluster server-31 mirror pool peer add jingh-test client.admin@server-32
+rbd --cluster server-32 mirror pool peer add jingh-test client.admin@server-31
 ```
 
 查看peer状态:
 
 ```
-# rbd -p int32bit-test mirror pool info
+# rbd -p jingh-test mirror pool info
 Mode: pool
 Peers:
   UUID                                 NAME      CLIENT
@@ -141,8 +141,8 @@ Peers:
 在31集群上创建一个rbd image，并在server-32集群上查看是否同步:
 
 ```
-rbd --cluster server-31 -p int32bit-test create rbd-mirror-test --size 1024
-rbd --cluster server-32 -p int32bit-test info rbd-mirror-test
+rbd --cluster server-31 -p jingh-test create rbd-mirror-test --size 1024
+rbd --cluster server-32 -p jingh-test info rbd-mirror-test
 rbd image 'rbd-mirror-test':
         size 1024 MB in 256 objects
         order 22 (4096 kB objects)
@@ -161,7 +161,7 @@ rbd image 'rbd-mirror-test':
 可以使用`rbd mirror image status`命令查看同步状态:
 
 ```
-[root@server-31 int32bit]# rbd --cluster server-32 mirror image status int32bit-test/rbd-mirror-test
+[root@server-31 jingh]# rbd --cluster server-32 mirror image status jingh-test/rbd-mirror-test
 rbd-mirror-test:
   global_id:   163688ba-52fe-4610-a3d5-eb90c663bd4c
   state:       up+syncing
@@ -172,7 +172,7 @@ rbd-mirror-test:
 `syncing`表示正在同步，同步完成后状态为`replaying`。也可以通过`rbd mirror pool status`查看整个pool的同步状态:
 
 ```
-# rbd --cluster server-32 mirror pool status  --verbose int32bit-test
+# rbd --cluster server-32 mirror pool status  --verbose jingh-test
 health: OK
 images: 5 total
     4 replaying
@@ -187,7 +187,7 @@ images: 5 total
 当RBD image开启了某些高级特性后，内核可能不支持，因此不能执行rbd map操作，否则出现`RBD image feature set mismatch`错误。
 
 ```
-# rbd map int32bit-test/mirror-test
+# rbd map jingh-test/mirror-test
 rbd: sysfs write failed
 RBD image feature set mismatch. You can disable features unsupported by the kernel with "rbd feature disable".
 In some cases useful info is found in syslog - try "dmesg | tail" or so.
@@ -202,7 +202,7 @@ yum install rbd-nbd
 map image到本地nbd设备:
 
 ```
-# rbd nbd map int32bit-test/mirror-test
+# rbd nbd map jingh-test/mirror-test
 /dev/nbd0
 ```
 

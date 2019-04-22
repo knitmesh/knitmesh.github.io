@@ -125,7 +125,7 @@ boot from volume的实践过程:
 #### 2.2.1 创建一个cinder，并指定image
 
 ```bash
-cinder create --image-id f80ba429-417d-4ae7-8b4d-855a484f8454 --display_name=int32bit-from-image 20
+cinder create --image-id f80ba429-417d-4ae7-8b4d-855a484f8454 --display_name=jingh-from-image 20
 ```
 
 该命令会从glance image中拷贝一个副本作为新建的volume卷，如果是ceph后端，则直接clone，我们可以使用rbd命令验证:
@@ -159,7 +159,7 @@ cinder show ${VOLUME_ID}  | grep bootable | awk '{print $4}' # 返回true
 ```bash 
 nova boot --flavor m1.small \
   	--block-device source=volume,id=${VOLUME_ID},dest=volume,size=10,shutdown=preserve,bootindex=0 \
-	int32bit-boot-from-volume
+	jingh-boot-from-volume
 ```
 使用`nova show`查看信息:
 
@@ -207,7 +207,7 @@ VOLUME_ID=739bfe68-052a-4b6e-bfb0-ba83e49c63d6
 NETWORK_ID=2109924d-3bc8-43e1-a287-ca2c22608ccc
 IMAGE_ID=f2d3e1f5-6dc8-415c-b1a4-4baf9030ba6a
 nova boot --flavor $FLAVOR_ID --image $IMAGE_ID \
-  --block-device source=volume,id=$VOLUME_ID,dest=volume,shutdown=preserve --nic net-id=$NETWORK_ID int32bit-boot-from-volume
+  --block-device source=volume,id=$VOLUME_ID,dest=volume,shutdown=preserve --nic net-id=$NETWORK_ID jingh-boot-from-volume
 ```
 
 由前面可知，当同时指定了image和volume时会优先从image启动，查看info:
@@ -273,7 +273,7 @@ VOLUME_ID=21324408-e1bf-4028-b81d-9c9173f89ac6 # 刚刚创建的volume id
 NETWORK_ID=2109924d-3bc8-43e1-a287-ca2c22608ccc
 IMAGE_ID=f2d3e1f5-6dc8-415c-b1a4-4baf9030ba6a # 刚刚上传的ISO镜像
 nova boot --flavor $FLAVOR_ID --image $IMAGE_ID \
-  --block-device source=volume,id=$VOLUME_ID,dest=volume,shutdown=preserve --nic net-id=$NETWORK_ID int32bit-boot-from-volume
+  --block-device source=volume,id=$VOLUME_ID,dest=volume,shutdown=preserve --nic net-id=$NETWORK_ID jingh-boot-from-volume
 ```
 
 在进入vnc界面，直接通过Dashboard或者从命令行获取vnc地址:
@@ -313,7 +313,7 @@ VOLUME_ID=21324408-e1bf-4028-b81d-9c9173f89ac6
 NETWORK_ID=2109924d-3bc8-43e1-a287-ca2c22608ccc
 IMAGE_ID=f2d3e1f5-6dc8-415c-b1a4-4baf9030ba6a
 nova boot --flavor $FLAVOR_ID \
-  --block-device source=volume,id=$VOLUME_ID,dest=volume,size=20,shutdown=preserve,bootindex=0 --nic net-id=$NETWORK_ID int32bit-boot-from-volume-2
+  --block-device source=volume,id=$VOLUME_ID,dest=volume,size=20,shutdown=preserve,bootindex=0 --nic net-id=$NETWORK_ID jingh-boot-from-volume-2
 ```
 
 从启动参数看，我们移除了image参数，只指定了volume。

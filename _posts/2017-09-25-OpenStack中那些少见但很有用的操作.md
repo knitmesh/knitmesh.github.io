@@ -161,7 +161,7 @@ $ glance task-show 564b5ee4-56db-4360-bb71-d1d1c4d896a2
 我们创建一台虚拟机：
 
 ```sh
-nova boot --image f0b1239a-bb34-4cfb-ad06-e18cbb8ee4b9 --flavor m1.small --nic net-id=9f3aad86-f3c1-499b-ba62-5708dd229466 int32bit-test-lock
+nova boot --image f0b1239a-bb34-4cfb-ad06-e18cbb8ee4b9 --flavor m1.small --nic net-id=9f3aad86-f3c1-499b-ba62-5708dd229466 jingh-test-lock
 ```
 
 使用管理员账号对虚拟机进行`lock`操作:
@@ -317,16 +317,16 @@ Cinder创建一个volume时会调用后端存储系统创建一个数据卷，�
 假设我们使用的是LVM后端driver，首先我们创建一个LV:
 
 ```
-$ lvcreate --name int32bit-test-LV --size 1G cinder-volumes
-  Logical volume "int32bit-test-LV" created.
-$ lvs | grep int32bit
-int32bit-test-LV                               cinder-volumes -wi-a-----  1.00g
+$ lvcreate --name jingh-test-LV --size 1G cinder-volumes
+  Logical volume "jingh-test-LV" created.
+$ lvs | grep jingh
+jingh-test-LV                               cinder-volumes -wi-a-----  1.00g
 ```
 
 使用`manage`子命令纳管刚刚创建的LV:
 
 ```
-$ cinder manage --name int32bit-test-manage 'devstack@lvm#cinder-volumes' int32bit-test-LV
+$ cinder manage --name jingh-test-manage 'devstack@lvm#cinder-volumes' jingh-test-LV
 +--------------------------------+--------------------------------------+
 |            Property            |                Value                 |
 +--------------------------------+--------------------------------------+
@@ -341,7 +341,7 @@ $ cinder manage --name int32bit-test-manage 'devstack@lvm#cinder-volumes' int32b
 |            metadata            |                  {}                  |
 |        migration_status        |                 None                 |
 |          multiattach           |                False                 |
-|              name              |      int32bit-test-manage            |
+|              name              |      jingh-test-manage            |
 |     os-vol-host-attr:host      |     devstack@lvm#cinder-volumes      |
 | os-vol-mig-status-attr:migstat |                 None                 |
 | os-vol-mig-status-attr:name_id |                 None                 |
@@ -364,10 +364,10 @@ $ cinder manage --name int32bit-test-manage 'devstack@lvm#cinder-volumes' int32b
 我们使用`lvs`查看我们创建的LV是否还存在:
 
 ```sh
-$ lvs | grep int32bit
+$ lvs | grep jingh
 ```
 
-我们发现创建的int32bit-test-LV不存在了，这是怎么回事呢？查看实现源码如下:
+我们发现创建的jingh-test-LV不存在了，这是怎么回事呢？查看实现源码如下:
 
 ```python
 def manage_existing(self, volume, existing_ref):
@@ -421,7 +421,7 @@ local-detach
 首先创建一个volume:
 
 ```
-$ cinder create --volume-type lvm --name int32bit-test-local-attach 1
+$ cinder create --volume-type lvm --name jingh-test-local-attach 1
 +--------------------------------+--------------------------------------+
 | Property                       | Value                                |
 +--------------------------------+--------------------------------------+
@@ -437,7 +437,7 @@ $ cinder create --volume-type lvm --name int32bit-test-local-attach 1
 | metadata                       | {}                                   |
 | migration_status               | None                                 |
 | multiattach                    | False                                |
-| name                           | int32bit-test-local-attach           |
+| name                           | jingh-test-local-attach           |
 | os-vol-host-attr:host          | None                                 |
 | os-vol-mig-status-attr:migstat | None                                 |
 | os-vol-mig-status-attr:name_id | None                                 |
@@ -499,7 +499,7 @@ lost+found
 首先我们在`admin`租户下创建一个volume:
 
 ```sh
-cinder create --name int32bit-test-transfer 1
+cinder create --name jingh-test-transfer 1
 ```
 
 此时我们在`demo`的租户下看不到刚刚创建的volume:
@@ -516,7 +516,7 @@ $ cinder list
 在`admin`租户下创建一个`transfer`：
 
 ```
-$ cinder transfer-create --name test-transfer int32bit-test-transfer
+$ cinder transfer-create --name test-transfer jingh-test-transfer
 +------------+--------------------------------------+
 | Property   | Value                                |
 +------------+--------------------------------------+
@@ -554,7 +554,7 @@ $ cinder list
 +--------------------------------------+-----------+------------------------+------+-------------+----------+-------------+
 | ID                                   | Status    | Name                   | Size | Volume Type | Bootable | Attached to |
 +--------------------------------------+-----------+------------------------+------+-------------+----------+-------------+
-| 093f41b1-39f9-4a01-bfb8-116baf1dbe2f | available | int32bit-test-transfer | 1    | lvmdriver-1 | false    |             |
+| 093f41b1-39f9-4a01-bfb8-116baf1dbe2f | available | jingh-test-transfer | 1    | lvmdriver-1 | false    |             |
 +--------------------------------------+-----------+------------------------+------+-------------+----------+-------------+
 ```
 

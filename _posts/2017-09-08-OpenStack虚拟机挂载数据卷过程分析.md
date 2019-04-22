@@ -23,7 +23,7 @@ Nova创建一台云主机的三个必要参数为:
 创建一台云主机的CLI为:
 
 ```sh
-nova boot --image ${IMAGE_ID} --flavor m1.small --nic net-id=${NETWORK_ID} int32bit-test-1
+nova boot --image ${IMAGE_ID} --flavor m1.small --nic net-id=${NETWORK_ID} jingh-test-1
 ```
 
 使用`nova list`可以查看租户的所有云主机列表。
@@ -40,7 +40,7 @@ Cinder组件为OpenStack提供块存储服务(Block Storage as Service)，类似
 创建一个20G的volume：
 
 ```sh
-cinder create --volume-type ssd --name int32bit-test-volume 20
+cinder create --volume-type ssd --name jingh-test-volume 20
 ```
 
 Cinder目前最典型的应用场景就是为Nova云主机提供云硬盘功能，用户可以把一个volume卷挂载到Nova的云主机中，当作云主机的一个虚拟块设备使用。
@@ -85,7 +85,7 @@ systemctl start target
 运行`targetcli`检查是否安装成功:
 
 ```
-int32bit $ targetcli
+jingh $ targetcli
 targetcli shell version 2.1.fb41
 Copyright 2011-2013 by Datera, Inc and others.
 For help on commands, type 'help'.
@@ -118,19 +118,19 @@ Created fileio test_fileio with size 2147483648
 创建了backstore后，我们创建一个target，`cd`到`/iscsi`目录:
 
 ```sh
-/iscsi> create iqn.2017-09.me.int32bit:int32bit
-Created target iqn.2017-09.me.int32bit:int32bit.
+/iscsi> create iqn.2017-09.me.jingh:jingh
+Created target iqn.2017-09.me.jingh:jingh.
 Created TPG 1.
 Default portal not created, TPGs within a target cannot share ip:port.
 /iscsi>
 ```
 
-以上我们创建了一个名为`int32bit`的target，前面的`iqn.2017-09.me.int32bit`是iSCSI Qualified Name (IQN)，具体含义参考[wikipedia-ISCSI](https://en.wikipedia.org/wiki/ISCSI)，这里简单理解为一个独一无二的namespace就好。使用`ls`命令我们发现创建一个目录`iqn.2017-09.me.int32bit:int32bit`（注意：实际上并不是目录，我们暂且这么理解）。
+以上我们创建了一个名为`jingh`的target，前面的`iqn.2017-09.me.jingh`是iSCSI Qualified Name (IQN)，具体含义参考[wikipedia-ISCSI](https://en.wikipedia.org/wiki/ISCSI)，这里简单理解为一个独一无二的namespace就好。使用`ls`命令我们发现创建一个目录`iqn.2017-09.me.jingh:jingh`（注意：实际上并不是目录，我们暂且这么理解）。
 
 创建完target后，我们还需要把这个target export出去，即进入监听状态，我们称为portal，创建portal也很简单:
 
 ```sh
-/iscsi> cd iqn.2017-09.me.int32bit:int32bit/tpg1/portals/
+/iscsi> cd iqn.2017-09.me.jingh:jingh/tpg1/portals/
 /iscsi/iqn.20.../tpg1/portals> create 10.0.0.4
 Using default IP port 3260
 Created network portal 10.0.0.4:3260.
@@ -149,8 +149,8 @@ Created LUN 0.
 此时我们的target包含有一个lun设备了:
 
 ```sh
-/iscsi/iqn.20...bit/tpg1/luns> ls /iscsi/iqn.2017-09.me.int32bit:int32bit/
-o- iqn.2017-09.me.int32bit:int32bit ...................................................................................... [TPGs: 1]
+/iscsi/iqn.20...bit/tpg1/luns> ls /iscsi/iqn.2017-09.me.jingh:jingh/
+o- iqn.2017-09.me.jingh:jingh ...................................................................................... [TPGs: 1]
   o- tpg1 ................................................................................................... [no-gen-acls, no-auth]
     o- acls .............................................................................................................. [ACLs: 0]
     o- luns .............................................................................................................. [LUNs: 1]
@@ -169,19 +169,19 @@ systemctl start iscsid iscsi
 拿到本机的initiator name:
 
 ```
-int32bit $ cat /etc/iscsi/initiatorname.iscsi
+jingh $ cat /etc/iscsi/initiatorname.iscsi
 InitiatorName=iqn.1994-05.com.redhat:e0db637c5ce
 ```
 
 client需要连接server target，还需要ACL认证，我们在server端增加client的访问权限，在server端运行:
 
 ```sh
-int32bit $ targetcli
+jingh $ targetcli
 targetcli shell version 2.1.fb41
 Copyright 2011-2013 by Datera, Inc and others.
 For help on commands, type 'help'.
 
-/> cd /iscsi/iqn.2017-09.me.int32bit:int32bit/tpg1/acls
+/> cd /iscsi/iqn.2017-09.me.jingh:jingh/tpg1/acls
 /iscsi/iqn.20...bit/tpg1/acls> create iqn.1994-05.com.redhat:e0db637c5ce
 Created Node ACL for iqn.1994-05.com.redhat:e0db637c5ce
 Created mapped LUN 0.
@@ -194,33 +194,33 @@ Created mapped LUN 0.
 首先我们使用`iscsiadm`命令自动发现本地可见的target列表:
 
 ```sh
-int32bit $ iscsiadm --mode discovery --type sendtargets --portal 10.0.0.4 | grep int32bit
-10.0.0.4:3260,1 iqn.2017-09.me.int32bit:int32bit
+jingh $ iscsiadm --mode discovery --type sendtargets --portal 10.0.0.4 | grep jingh
+10.0.0.4:3260,1 iqn.2017-09.me.jingh:jingh
 ```
 
 发现target后，我们登录验证后才能使用：
 
 ```sh
-int32bit $ iscsiadm -m node -T iqn.2017-09.me.int32bit:int32bit -l
-Logging in to [iface: default, target: iqn.2017-09.me.int32bit:int32bit, portal: 10.0.0.4,3260] (multiple)
-Login to [iface: default, target: iqn.2017-09.me.int32bit:int32bit, portal: 10.0.0.4,3260] successful.
+jingh $ iscsiadm -m node -T iqn.2017-09.me.jingh:jingh -l
+Logging in to [iface: default, target: iqn.2017-09.me.jingh:jingh, portal: 10.0.0.4,3260] (multiple)
+Login to [iface: default, target: iqn.2017-09.me.jingh:jingh, portal: 10.0.0.4,3260] successful.
 ```
 
 我们可以查看所有已经登录的target:
 
 ```sh
-int32bit $ iscsiadm -m session
+jingh $ iscsiadm -m session
 tcp: [173] 10.0.0.4:3260,1 iqn.2010-10.org.openstack:volume-1e062767-f0bc-40fb-9a03-7b0df61b5671 (non-flash)
 tcp: [198] 10.0.0.4:3260,1 iqn.2010-10.org.openstack:volume-060fe764-c17b-45da-af6d-868c1f5e19df (non-flash)
 tcp: [199] 10.0.0.4:3260,1 iqn.2010-10.org.openstack:volume-757f6281-8c71-430e-9f7c-5df2e3008b46 (non-flash)
 tcp: [203] 10.0.0.4:3260,1 iqn.2010-10.org.openstack:volume-2ed1b04c-b34f-437d-9aa3-3feeb683d063 (non-flash)
-tcp: [205] 10.0.0.4:3260,1 iqn.2017-09.me.int32bit:int32bit (non-flash)
+tcp: [205] 10.0.0.4:3260,1 iqn.2017-09.me.jingh:jingh (non-flash)
 ```
 
 此时target已经自动映射到本地块设备，我们可以使用`lsblk`查看:
 
 ```
-int32bit $ lsblk --scsi
+jingh $ lsblk --scsi
 NAME HCTL       TYPE VENDOR   MODEL             REV TRAN
 sda  0:0:2:0    disk ATA      INTEL SSDSC2BX40 DL2B
 sdb  0:0:3:0    disk ATA      INTEL SSDSC2BX40 DL2B
@@ -275,12 +275,12 @@ ceph的更多知识可以参考[官方文档](http://ceph.com/)，这里我们�
 我们可以通过`rbd`命令创建一个rbd `image`：
 
 ```sh
-$ rbd -p test2 create --size 1024 int32bit-test-rbd --new-format
+$ rbd -p test2 create --size 1024 jingh-test-rbd --new-format
 $ rbd -p test2 ls
-int32bit-test-rbd
+jingh-test-rbd
 centos7.raw
-$ rbd -p test2 info int32bit-test-rbd
-rbd image 'int32bit-test-rbd':
+$ rbd -p test2 info jingh-test-rbd
+rbd image 'jingh-test-rbd':
         size 1024 MB in 256 objects
         order 22 (4096 kB objects)
         block_name_prefix: rbd_data.9beee82ae8944a
@@ -289,12 +289,12 @@ rbd image 'int32bit-test-rbd':
         flags:
 ```
 
-以上我们通过`create`子命令创建了一个name为`int32bit-test-rbd`，大小为1G的 `image`，其中`-p`的参数值`test2`就是`pool`名称。通过`ls`命令可以查看所有的`image`列表，`info`命令查看`image`的详细信息。
+以上我们通过`create`子命令创建了一个name为`jingh-test-rbd`，大小为1G的 `image`，其中`-p`的参数值`test2`就是`pool`名称。通过`ls`命令可以查看所有的`image`列表，`info`命令查看`image`的详细信息。
 
 iSCSI创建lun设备后，Initiator端通过`login`把设备映射到本地。`rbd image`则是通过`map`操作映射到本地的，在client端安装ceph client包并配置好证书后，只需要通过`rbd map`即可映射到本地中:
 
 ```
-$ rbd -p test2 map int32bit-test-rbd
+$ rbd -p test2 map jingh-test-rbd
 /dev/rbd0
 ```
 
@@ -372,7 +372,7 @@ volume_backend_name=lvm
 volume_group = cinder-volumes
 ```
 
-OpenStack源码阅读方法可以参考[如何阅读OpenStack源码](http://int32bit.me/2017/08/28/%E5%A6%82%E4%BD%95%E9%98%85%E8%AF%BBOpenStack%E6%BA%90%E7%A0%81/)，这里不过多介绍。这里需要说明的是，Nova中有一个数据库表专门用户存储数据卷和虚拟机的映射关系的，这个表名为`block_device_mapping`，其字段如下：
+OpenStack源码阅读方法可以参考[如何阅读OpenStack源码](http://jingh.me/2017/08/28/%E5%A6%82%E4%BD%95%E9%98%85%E8%AF%BBOpenStack%E6%BA%90%E7%A0%81/)，这里不过多介绍。这里需要说明的是，Nova中有一个数据库表专门用户存储数据卷和虚拟机的映射关系的，这个表名为`block_device_mapping`，其字段如下：
 
 ```
 MariaDB [nova]> desc block_device_mapping;

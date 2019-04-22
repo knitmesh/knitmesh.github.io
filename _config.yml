@@ -89,7 +89,7 @@ service-worker: true
 friends: [
     {
         title: "cnblog博客地址",
-        href: "http://www.cnblogs.com/int32bit/"
+        href: "http://www.cnblogs.com/jingh/"
     },{
         title: "麦子迈",
         href: "http://www.wzxue.com/"
@@ -110,7 +110,7 @@ friends: [
         href: "http://www.ruanyifeng.com/"
     },{
         title: "Leetcode解题",
-        href: "https://github.com/int32bit/leetcode"
+        href: "https://github.com/jingh/leetcode"
     },{
         title: "依云's Blog",
         href: "http://blog.lilydjwg.me/"
