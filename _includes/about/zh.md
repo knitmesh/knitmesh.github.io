@@ -1,12 +1,14 @@
-> Linuxer, Vimer, Pythoner, OpenStacker, Docker.
+> Linuxer，Vimer，Pythoner，OpenStacker，Docker.
 
 Hey，我是Jingh，一个软件工程师。从事大数据和云计算相关工作， 主攻Openstack， 现就职于Sinobbd，负责Nova、Cinder以及Sahara相关工作。
 
-Linuxer, Vimer, UNIX信徒,喜欢技术分享、讨论，专注于云计算、分布式、大数据相关技术,具有三年以上的Openstack开发运维经验
+Linuxer，Vimer，UNIX信徒,喜欢技术分享、讨论，专注于云计算、分布式、大数据相关技术,具有三年以上的Openstack开发运维经验。
 
 一些项目经验和开源软件项目，👉 戳 [Portfolio](/portfolio)、[Github](http://github.com/knitmesh)。 
 
 本站是一个技术博客,主要分享或者吐槽一些技术见闻、学习总结、个人感悟等， 目前主要专注于Linux、云计算(OpenStack、Ceph、Docker)以及分布式相关技术。
+
+人类文明近万年，计算机历史不到百年，云计算火热了十多年，即使openstack也已经存在了近十年，相关知识早已浩瀚无边，我说能接触到的不过大海之一滴，所能理解掌握谨记于心的更不过是这一滴中很微小的一部分，我们每日所做的也不过是为了使这一滴更大，使那一部分更多而已。
 
 我认为，人的记忆力就像计算机中的缓存，缓存空间有限，因此要存入新的东西就必然需要丢弃旧东西，大脑使用的是类似LRU缓存淘汰算法，你如果不刻意回忆回忆，随着时间的流逝，很多东西就会慢慢忘记。 有些不重要的东西忘记就忘记了，但如果是些重要的东西忘记了就损失了。为了避免丢失有价值的记忆，最好的方式是整理(序列化)并持久化到外部设备中，比如笔记、博客等。用一个命令表示:
 
