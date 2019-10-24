@@ -128,30 +128,38 @@ FOOD_MENU = {
 
 class WeightControlFactory:
 
-    def __init__(self, weight, sex, age, height, food_menu):
+    def __init__(self, weight, sex, age, height, food_menu, activity, bfr=0):
         # 当前体重和目标体重
         self.current_weight = weight
         self.week_food = {}
         self.sex = sex
         self.age = age
         self.height = height
+        # 体脂率
+        self.bfr = bfr
+        # 活动强度
+        self.activity = activity
         self.food_menu = food_menu
-
 
     @property
     def bmi(self):
-        if self.sex == 'man':
-            # 基础代谢 男
-            bmi = (67 + 13.73 * self.current_weight + 5 * self.height - 6.9 * self.age)
+        # 体脂率公式 这个公式和性别无关
+        if self.bfr:
+            # BMR = 370 + (21.6 * 瘦体重(kg))
+            bmi = 370 + (21.6 * self.current_weight * (1 - self.bfr))
         else:
-            # 基础代谢 女
-            bmi = 661 + 9.6 * self.current_weight + 1.72 * self.height - 4.7 * self.age
+            if self.sex == 'man':
+                # 基础代谢 男
+                bmi = (67 + 13.73 * self.current_weight + 5 * self.height - 6.9 * self.age) * 0.95
+            else:
+                # 基础代谢 女
+                bmi = (665 + 9.6 * self.current_weight + 1.8 * self.height - 4.7 * self.age) * 0.95
         return bmi
 
     @property
-    def bee(self, activity=1.5):
+    def bee(self):
         # 活动代谢
-        return self.bmi * activity
+        return self.bmi * self.activity
 
     def pai(self, schema):
         """计算一天的卡路里"""
@@ -286,9 +294,9 @@ class WeightControlFactory:
         return eat.kcal_total
 
 
-def simulate(weight, target_weight, food_menu, plans, sex, age, height, week=0, prediction=False):
+def simulate(weight, target_weight, food_menu, plans, sex, age, height, activity, bfr, week=0, prediction=False):
     """模拟体重下降的的饮食参考"""
-    wf = WeightControlFactory(weight, sex, age, height, food_menu)
+    wf = WeightControlFactory(weight, sex, age, height, food_menu, activity, bfr)
     print("-------------第%s周-------------" % (week + 1))
 
     bmi = wf.bmi
@@ -326,7 +334,7 @@ def simulate(weight, target_weight, food_menu, plans, sex, age, height, week=0, 
     if prediction:
         if wf.current_weight > target_weight:
             # 使用当前体重递归计算
-            simulate(wf.current_weight, target_weight, food_menu, plans, sex, age, height, week, prediction)
+            simulate(wf.current_weight, target_weight, food_menu, plans, sex, age, height, activity, bfr, week, prediction)
         else:
             print(Logger.HEADER + "------------------------------------------------------" + Logger.ENDC)
             print('预计需历时%s周, 达到目标体重%skg' % (week, '%.2f' % wf.current_weight))
@@ -345,6 +353,11 @@ class Prepare:
         parser.add_argument("-w", "--weight", help="当前体重", type=float)
         parser.add_argument("-a", "--age", help="年龄", type=int)
         parser.add_argument("-g", "--height", help="身高", type=int)
+        parser.add_argument("--bfr", help="体脂率", type=float, default=0.0)
+        parser.add_argument("--activity", help="活动强度",
+                            type=float,
+                            default=1.55,
+                            choices=[1.2, 1.375, 1.55, 1.725, 1.9])
 
         parser.add_argument("--plans",
                             nargs='+',
@@ -382,7 +395,16 @@ class Prepare:
         # 最后再吃碳水类
         food_menu['oat'] = 2
         food_menu['rice'] = -1
-        simulate(args.weight, args.target_weight, food_menu, args.plans, args.sex, args.age, args.height, prediction=args.prediction)
+        simulate(args.weight,
+                 args.target_weight,
+                 food_menu,
+                 args.plans,
+                 args.sex,
+                 args.age,
+                 args.height,
+                 args.activity,
+                 args.bfr,
+                 prediction=args.prediction)
 
 
 def main(argv=sys.argv[1:]):
