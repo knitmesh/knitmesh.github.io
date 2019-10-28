@@ -115,15 +115,15 @@ class FoodObject:
         return self
 
 FOOD_MENU = {
-    "egg": FoodObject('鸡蛋\t\t', 'protein', 7.3, 6.3, 1.3, 91, '中等'),
-    "powder": FoodObject('all max 蛋白粉\t', 'protein', 27, 0, 1, 115, '30g'),
-    "beef": FoodObject('牛里脊\t\t', 'protein', 22.2, 0.9, 2.4, 107, '100g'),
-    "chicken": FoodObject('鸡胸肉\t\t', 'protein', 19.4, 5, 2.5, 133, '100g'),
-    "milk": FoodObject('牛奶\t\t', 'protein', 8.8, 3.8, 12.3, 118, '250ml'),
-    "rice": FoodObject('杂米饭\t\t', 'carbohydrate', 4.1, 0.5, 26.8, 125, '100g'),
-    "oat": FoodObject('燕麦\t\t', 'carbohydrate', 3, 1.5, 12.5, 76, '25g'),
-    "oil": FoodObject('花生油\t\t', 'fat', 0, 5, 0, 44, '5ml'),
-    "nuts": FoodObject('夏威夷果\t', 'fat', 0.8, 6.7, 1.9, 71, '10g'),
+    "egg": FoodObject('煮鸡蛋', 'protein', 7.3, 6.3, 1.3, 91, '中等'),
+    "powder": FoodObject('蛋白粉', 'protein', 27, 0, 1, 115, '30g'),
+    "beef": FoodObject('牛里脊', 'protein', 22.2, 0.9, 2.4, 107, '100g'),
+    "chicken": FoodObject('鸡胸肉', 'protein', 19.4, 5, 2.5, 133, '100g'),
+    "milk": FoodObject('低脂牛奶', 'protein', 8.8, 3.8, 12.3, 118, '250ml'),
+    "rice": FoodObject('杂米饭', 'carbohydrate', 4.1, 0.5, 26.8, 125, '100g'),
+    "oat": FoodObject('燕麦片', 'carbohydrate', 3, 1.5, 12.5, 76, '25g'),
+    "oil": FoodObject('花生油', 'fat', 0, 5, 0, 44, '5ml'),
+    "nuts": FoodObject('夏威夷果', 'fat', 0.8, 6.7, 1.9, 71, '10g'),
 }
 
 class WeightControlFactory:
@@ -169,8 +169,7 @@ class WeightControlFactory:
         TS = self.current_weight * nmap['TS']
 
         plan_kcal_total = (DB + TS) * 4 + ZF * 9
-        print('|    ' + nmap['alias'] + '     |')
-        print("|---------------|")
+        print(nmap['alias'])
         print("")
         print("三大营养素配比:")
         print("\t蛋白质\t\t %sg" % ('%.0f' % DB))
@@ -199,9 +198,9 @@ class WeightControlFactory:
         """
         week_kacl_total = 0
         for index, val in enumerate(plans):
-            print("|---------------|")
-            print('|    星期 %s     |' % (index + 1))
-            print("|---------------|")
+
+            print('星期%s' % (index + 1))
+
             week_kacl_total = week_kacl_total + self.pai(val)
         return week_kacl_total
 
@@ -218,7 +217,7 @@ class WeightControlFactory:
         else:
             self.week_food[food_name] = food.number
         print("")
-        print('\t%s 份\t\t%s\t热量:\t%skcal' % ('%.2f' % food.number, food_name, '%.2f' % food.kcal_total))
+        print('  %s\t %s份 (%s/份)\t热量:\t%skcal' % (food.name, '%.2f' % food.number, food.unit, '%.2f' % food.kcal_total))
 
     def over_fed(self, DB, ZF, TS, prepare_food, record_eat):
 
@@ -297,7 +296,8 @@ class WeightControlFactory:
 def simulate(weight, target_weight, food_menu, plans, sex, age, height, activity, bfr, week=0, prediction=False):
     """模拟体重下降的的饮食参考"""
     wf = WeightControlFactory(weight, sex, age, height, food_menu, activity, bfr)
-    print("-------------第%s周-------------" % (week + 1))
+    if prediction:
+        print("-------------第%s周-------------" % (week + 1))
 
     bmi = wf.bmi
     bee = wf.bee
@@ -311,7 +311,7 @@ def simulate(weight, target_weight, food_menu, plans, sex, age, height, activity
     print('')
     print Logger.FAIL + "本周需要准备的食材:"
     for k, v in wf.week_food.items():
-        print(Logger.FAIL + "\t%s:\t%s份" % (k, '%.0f' % v))
+        print(Logger.FAIL + "\t%s份\t%s" % ('%.2f' % v,k))
 
     print('')
 
@@ -328,7 +328,7 @@ def simulate(weight, target_weight, food_menu, plans, sex, age, height, activity
     if prediction:
         print("减至目标体重%skg 预计还需约 %s周" % (
             target_weight, ('%.2f' % ((wf.current_weight - target_weight) * 7700 / ((bee - week_kcal_total / 7) * 7)))))
-    print(Logger.OKGREEN + "------------------------------------------------------" + Logger.ENDC)
+    print(Logger.OKGREEN + "-------------------------------------------" + Logger.ENDC)
     print('')
 
     if prediction:
@@ -336,9 +336,9 @@ def simulate(weight, target_weight, food_menu, plans, sex, age, height, activity
             # 使用当前体重递归计算
             simulate(wf.current_weight, target_weight, food_menu, plans, sex, age, height, activity, bfr, week, prediction)
         else:
-            print(Logger.HEADER + "------------------------------------------------------" + Logger.ENDC)
+            print(Logger.HEADER + "-------------------------------------------" + Logger.ENDC)
             print('预计需历时%s周, 达到目标体重%skg' % (week, '%.2f' % wf.current_weight))
-            print(Logger.HEADER + "------------------------------------------------------" + Logger.ENDC)
+            print(Logger.HEADER + "-------------------------------------------" + Logger.ENDC)
             return
 
 
