@@ -1,5 +1,5 @@
 #!/usr/bin/python
-#-*- coding:utf-8 -*-
+# -*- coding:utf-8 -*-
 import sys
 import argparse
 
@@ -33,22 +33,22 @@ class Eat:
         self.kcal_total = self.kcal_total + food.kcal_total
         return self
 
-class FoodObject:
 
+class FoodObject:
     def __init__(self, name, type, protein, fat, carbohydrate, kcal, unit):
-        self.name = name # 名称
-        self.type = type # 类型
+        self.name = name  # 名称
+        self.type = type  # 类型
 
         if type == 'carbohydrate':
             # 碳水中的蛋白质利用率只有1/2
             self.protein = protein / 2
         else:
             self.protein = protein
-        self.fat = fat # 脂肪
-        self.carbohydrate = carbohydrate # 碳水
-        self.kcal = kcal # 卡路里
-        self.unit = unit # 单位
-        self.number = 0 # 数量/份
+        self.fat = fat  # 脂肪
+        self.carbohydrate = carbohydrate  # 碳水
+        self.kcal = kcal  # 卡路里
+        self.unit = unit  # 单位
+        self.number = 0  # 数量/份
 
         self.protein_total = 0
         self.fat_total = 0
@@ -81,6 +81,7 @@ class FoodObject:
         self.number = float('%.6f' % (self.number - other))
         return self
 
+
 FOOD_MENU = {
     "egg": FoodObject('煮鸡蛋', 'protein', 7.3, 6.3, 1.3, 91, '中等'),
     "powder": FoodObject('蛋白粉', 'protein', 27, 0, 1, 115, '30g'),
@@ -93,7 +94,6 @@ FOOD_MENU = {
     "oil": FoodObject('花生油', 'fat', 0, 5, 0, 44, '5ml'),
     "nuts": FoodObject('夏威夷果', 'fat', 0.8, 6.7, 1.9, 71, '10g'),
 }
-
 
 nutrient_map = {
     "high": {
@@ -132,8 +132,9 @@ nutrient_map = {
         "exclude_foods": [],
     },
 }
-class WeightControlFactory:
 
+
+class WeightControlFactory:
     def __init__(self, weight, sex, age, height, food_menu, activity, bfr=0):
         # 当前体重和目标体重
         self.current_weight = weight
@@ -185,15 +186,16 @@ class WeightControlFactory:
         print('参考饮食可食用食物份量:')
         practical_kcal = self.reference_food(DB, ZF, TS, schema)
         print("")
-        print("计划饮食总热量: %skcal" % ('%.0f' % plan_kcal_total))
-        print("参考饮食总热量: %skcal" % ('%.2f' % practical_kcal))
-        print('')
-        print((Logger.FAIL + '参考饮食外最多还可摄入%skcal, 建议以蔬菜作为补充' + Logger.ENDC) % ('%.0f' % (plan_kcal_total - practical_kcal)))
-        print('')
-        print("计划饮食总热量:")
+
+        print("计划饮食:")
+        print("\t总热量 %skcal" % ('%.0f' % plan_kcal_total))
+
         print("\t大于基础代谢 %s kcal" % ('%.0f' % (plan_kcal_total - self.bmi)))
         print("\t大于活动代谢 %s kcal" % ('%.0f' % (plan_kcal_total - self.bee)))
-        print("参考饮食总热量:")
+        print('')
+        print("参考饮食:")
+        print("\t总热量 %skcal" % ('%.2f' % practical_kcal))
+
         print("\t大于基础代谢 %s kcal" % ('%.0f' % (practical_kcal - self.bee)))
         print("\t大于活动代谢 %s kcal" % ('%.0f' % (practical_kcal - self.bmi)))
         print('')
@@ -227,7 +229,8 @@ class WeightControlFactory:
             self.week_food[food_name] = food.number
         if food.number > 0:
             print("")
-            print('  %s\t %s 份 (%s/份)\t热量:\t%s kcal' % (food.name, round(food.number, 2), food.unit, ('%.0f' % food.kcal_total)))
+            print('  %s\t %s 份 (%s/份)\t热量:\t%s kcal' % (
+            food.name, round(food.number, 2), food.unit, ('%.0f' % food.kcal_total)))
 
     def over_fed(self, DB, ZF, TS, prepare_food, record_eat):
 
@@ -289,18 +292,19 @@ class WeightControlFactory:
         self.judge_eat(DB, ZF, TS, eat, record_eat, prepare_food.get('protein', []))
         self.judge_eat(DB, ZF, TS, eat, record_eat, prepare_food.get('fat', []))
 
-
         # # 剩余可食用脂肪
         zf_residue = ZF - eat.fat_total
         db_residue = DB - eat.protein_total
         ts_residue = TS - eat.carbohydrate_total
         kcal_residue = zf_residue * 9 + (db_residue + ts_residue) * 4
         print("")
-        print("还可额外摄入:")
+        print("参考饮食外还可额外摄入:")
         print("\t脂肪:\t\t %sg" % ('%.1f' % zf_residue))
         print("\t蛋白质:\t\t %sg" % ('%.1f' % db_residue))
         print("\t碳水:\t\t %sg" % ('%.1f' % ts_residue))
-        print("\t相当于:\t\t %skcal" % ('%.0f' % kcal_residue))
+        print("")
+        print((Logger.FAIL + '\t参考饮食外最多还可摄入%skcal, 建议以蔬菜作为补充' + Logger.ENDC) % ('%.0f' % kcal_residue))
+
         print("")
         return eat.kcal_total
 
@@ -331,7 +335,6 @@ def simulate(weight, target_weight, food_menu, plans, sex, age, height, activity
         if v * flag > 0:
             print(Logger.FAIL + "\t%s份\t%s" % ('%.1f' % (v * flag), k))
 
-
     print('')
     print "平均数据:"
     print('')
@@ -361,7 +364,8 @@ def simulate(weight, target_weight, food_menu, plans, sex, age, height, activity
     if prediction:
         if wf.current_weight > target_weight:
             # 使用当前体重递归计算
-            simulate(wf.current_weight, target_weight, food_menu, plans, sex, age, height, activity, bfr, week, prediction)
+            simulate(wf.current_weight, target_weight, food_menu, plans, sex, age, height, activity, bfr, week,
+                     prediction)
         else:
             print(Logger.HEADER + "-------------------------------------------" + Logger.ENDC)
             print('预计需历时%s周, 达到目标体重%skg' % (week, '%.2f' % wf.current_weight))
@@ -385,6 +389,11 @@ class Prepare:
                             type=float,
                             default=1.55,
                             choices=[1.2, 1.375, 1.55, 1.725, 1.9])
+        # 几乎不动Calorie-Calculation=BMRx1.2
+        # 稍微运动（每周1-3次）总需=BMRx1.375
+        # 中度运动（每周3-5次）总需=BMRx1.55
+        # 积极运动（每周6-7次）总需=BMRx1.725
+        # 专业运动（2倍运动量）总需=BMRx1.9
 
         parser.add_argument("--plans",
                             nargs='+',
@@ -417,7 +426,7 @@ class Prepare:
         food_menu['milk'] = 3
         food_menu['beef'] = 1
         food_menu['oil'] = 2
-        food_menu['nuts'] = 1
+        food_menu['nuts'] = 3
         food_menu['chicken'] = -1
         # 最后再吃碳水类
         food_menu['glucose'] = 8
