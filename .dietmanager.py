@@ -190,9 +190,12 @@ class WeightControlFactory:
         print('')
         print((Logger.FAIL + '参考饮食外最多还可摄入%skcal, 建议以蔬菜作为补充' + Logger.ENDC) % ('%.0f' % (plan_kcal_total - practical_kcal)))
         print('')
-        print("计划饮食总热量大于基础代谢 %s kcal, 小于活动代谢 %s kcal" % ('%.0f' % (plan_kcal_total - self.bmi), '%.0f' % (plan_kcal_total - self.bee)))
-        print(
-        "参考饮食总热量大于基础代谢 %s kcal, 小于活动代谢 %s kcal" % ('%.0f' % (practical_kcal - self.bmi), '%.0f' % (practical_kcal - self.bee)))
+        print("计划饮食总热量:")
+        print("\t大于基础代谢 %s kcal" % ('%.0f' % (plan_kcal_total - self.bmi)))
+        print("\t大于活动代谢 %s kcal" % ('%.0f' % (plan_kcal_total - self.bee)))
+        print("参考饮食总热量:")
+        print("\t大于基础代谢 %s kcal" % ('%.0f' % (practical_kcal - self.bee)))
+        print("\t大于活动代谢 %s kcal" % ('%.0f' % (practical_kcal - self.bmi)))
         print('')
         print(Logger.HEADER + '*****************************************************' + Logger.ENDC)
 
@@ -314,8 +317,10 @@ def simulate(weight, target_weight, food_menu, plans, sex, age, height, activity
 
     week_kcal_total = wf.control_fat(plans)
 
+    # 以计划饮食的三大营养素预估的脂肪燃烧量
+    lose_fat = (bee * 7 - week_kcal_total) / 7700
     # 计算当前体重
-    wf.current_weight = wf.current_weight + (week_kcal_total - bee * 7) / 7700
+    wf.current_weight = wf.current_weight - lose_fat
     week += 1
     print('')
     print Logger.FAIL + "本周需要准备的食材:"
@@ -326,19 +331,27 @@ def simulate(weight, target_weight, food_menu, plans, sex, age, height, activity
         if v * flag > 0:
             print(Logger.FAIL + "\t%s份\t%s" % ('%.1f' % (v * flag), k))
 
-    print('')
-    print("基础代谢: \t\t%skcal" % ('%.0f' % bmi))
-    print("活动代谢: \t\t%skcal" % ('%.0f' % bee))
+
     print('')
     print "平均数据:"
+    print('')
+    print("\t基础代谢: \t\t%skcal" % ('%.0f' % bmi))
+    print("\t活动代谢: \t\t%skcal" % ('%.0f' % bee))
     print("\t日平均摄入: \t\t%skcal" % ('%.0f' % (week_kcal_total / len(plans))))
-    print("\t日平均热量缺口: \t%skcal" % ('%.0f' % ((week_kcal_total - bee * len(plans)) / len(plans))))
+    mean_kcal = (week_kcal_total - bee * len(plans)) / len(plans)
+    if mean_kcal > 0:
+        print("\t日平均热量盈余: \t%skcal" % ('%.0f' % mean_kcal))
+    else:
+        print("\t日平均热量缺口: \t%skcal" % ('%.0f' % mean_kcal))
     print('')
     if len(plans) == 7:
         print("以计划饮食热量推测:")
-        print("\t本周体重预计为: \t%s" % ('%.2f' % wf.current_weight))
-        print("\t周预计燃烧脂肪: \t%s kg" % ('%.2f' % ((week_kcal_total - bee * 7) / 7700)))
-    # print("周摄入总热量 %s kcal" % ('%.0f' % week_total))
+        print("\t本周预计体重: \t%s kg" % ('%.2f' % wf.current_weight))
+        if lose_fat > 0:
+            print("\t本周预计减脂: \t%s kg" % ('%.2f' % lose_fat))
+        else:
+            print("\t本周预计增重: \t%s kg" % ('%.2f' % (lose_fat * -1)))
+
     if prediction:
         print("减至目标体重%skg 预计还需约 %s周" % (
             target_weight, ('%.2f' % ((wf.current_weight - target_weight) * 7700 / ((bee - week_kcal_total / 7) * 7)))))
