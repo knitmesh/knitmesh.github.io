@@ -43,7 +43,7 @@ nutrient_map = {
     },
     "increase": {
         "alias": "增肌日",
-        "DB": 1.6,
+        "DB": 1.8,
         "ZF": 1.2,
         "TS": 4,
     },
@@ -392,7 +392,7 @@ class Prepare:
             return
         # 食物列表
         food_menu = collections.OrderedDict()
-        food_menu['egg'] = 1
+        food_menu['egg'] = 3
         food_menu['powder'] = 2
         food_menu['milk'] = 3
         food_menu['beef'] = 1
