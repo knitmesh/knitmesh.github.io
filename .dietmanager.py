@@ -196,8 +196,8 @@ class WeightControlFactory:
         print("参考饮食:")
         print("\t总热量 %skcal" % ('%.2f' % practical_kcal))
 
-        print("\t大于基础代谢 %s kcal" % ('%.0f' % (practical_kcal - self.bee)))
-        print("\t大于活动代谢 %s kcal" % ('%.0f' % (practical_kcal - self.bmi)))
+        print("\t大于基础代谢 %s kcal" % ('%.0f' % (practical_kcal - self.bmi)))
+        print("\t大于活动代谢 %s kcal" % ('%.0f' % (practical_kcal - self.bee)))
         print('')
         print(Logger.HEADER + '*****************************************************' + Logger.ENDC)
 
@@ -425,7 +425,7 @@ class Prepare:
         food_menu['powder'] = 2
         food_menu['milk'] = 3
         food_menu['beef'] = 1
-        food_menu['oil'] = 2
+        food_menu['oil'] = 4
         food_menu['nuts'] = 3
         food_menu['chicken'] = -1
         # 最后再吃碳水类
