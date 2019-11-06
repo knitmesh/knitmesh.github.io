@@ -16,44 +16,6 @@ class Logger:
     FAIL = '\033[91m'
     ENDC = '\033[0m'
 
-nutrient_map = {
-    "high": {
-        "alias": "高碳日",
-        "DB": 1.8,
-        "ZF": 1.2,
-        "TS": 3.5,
-        "exclude_foods": ['glucose'],
-    },
-    "middle": {
-        "alias": "中碳日",
-        "DB": 1.8,
-        "ZF": 1.2,
-        "TS": 2.5,
-        "exclude_foods": ['glucose'],
-    },
-    "low": {
-        "alias": "低碳日",
-        "DB": 2,
-        "ZF": 1.2,
-        "TS": 1.5,
-        "exclude_foods": ['glucose'],
-    },
-    "none": {
-        "alias": "断碳日",
-        "DB": 2,
-        "ZF": 1.2,
-        "TS": 0.5,
-        "exclude_foods": ['glucose'],
-    },
-    "increase": {
-        "alias": "增肌日",
-        "DB": 1.8,
-        "ZF": 1.2,
-        "TS": 4,
-        "exclude_foods": [],
-    },
-}
-
 
 class Eat:
     def __init__(self):
@@ -132,6 +94,44 @@ FOOD_MENU = {
     "nuts": FoodObject('夏威夷果', 'fat', 0.8, 6.7, 1.9, 71, '10g'),
 }
 
+
+nutrient_map = {
+    "high": {
+        "alias": "高碳日",
+        "DB": 1.8,
+        "ZF": 1.2,
+        "TS": 3.5,
+        "exclude_foods": ['glucose'],
+    },
+    "middle": {
+        "alias": "中碳日",
+        "DB": 1.8,
+        "ZF": 1.2,
+        "TS": 2.5,
+        "exclude_foods": ['glucose'],
+    },
+    "low": {
+        "alias": "低碳日",
+        "DB": 2,
+        "ZF": 1.2,
+        "TS": 1.5,
+        "exclude_foods": ['glucose'],
+    },
+    "none": {
+        "alias": "断碳日",
+        "DB": 2,
+        "ZF": 1.2,
+        "TS": 0.5,
+        "exclude_foods": ['glucose', 'milk', 'egg', 'oat', 'powder'],
+    },
+    "increase": {
+        "alias": "增肌日",
+        "DB": 1.8,
+        "ZF": 1.2,
+        "TS": 4,
+        "exclude_foods": [],
+    },
+}
 class WeightControlFactory:
 
     def __init__(self, weight, sex, age, height, food_menu, activity, bfr=0):
