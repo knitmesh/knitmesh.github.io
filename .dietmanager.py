@@ -107,11 +107,11 @@ class FoodObject:
 
     def sub(self, other):
         # 减少
-        self.protein_total = self.protein_total - self.protein * other
-        self.fat_total = self.fat_total - self.fat * other
-        self.carbohydrate_total = self.carbohydrate_total - self.carbohydrate * other
-        self.kcal_total = self.kcal_total - self.kcal * other
-        self.number = self.number - other
+        self.protein_total = float('%.6f' % (self.protein_total - self.protein * other))
+        self.fat_total = float('%.6f' % (self.fat_total - self.fat * other))
+        self.carbohydrate_total = float('%.6f' % (self.carbohydrate_total - self.carbohydrate * other))
+        self.kcal_total = float('%.6f' % (self.kcal_total - self.kcal * other))
+        self.number = float('%.6f' % (self.number - other))
         return self
 
 FOOD_MENU = {
@@ -121,6 +121,7 @@ FOOD_MENU = {
     "chicken": FoodObject('鸡胸肉', 'protein', 19.4, 5, 2.5, 133, '100g'),
     "milk": FoodObject('低脂牛奶', 'protein', 8.8, 3.8, 12.3, 118, '250ml'),
     "rice": FoodObject('杂米饭', 'carbohydrate', 4.1, 0.5, 26.8, 125, '100g'),
+    "glucose": FoodObject('葡萄糖', 'carbohydrate', 0, 0, 9.6, 39, '10g'),
     "oat": FoodObject('燕麦片', 'carbohydrate', 3, 1.5, 12.5, 76, '25g'),
     "oil": FoodObject('花生油', 'fat', 0, 5, 0, 44, '5ml'),
     "nuts": FoodObject('夏威夷果', 'fat', 0.8, 6.7, 1.9, 71, '10g'),
@@ -150,10 +151,10 @@ class WeightControlFactory:
         else:
             if self.sex == 'man':
                 # 基础代谢 男
-                bmi = (67 + 13.73 * self.current_weight + 5 * self.height - 6.9 * self.age) * 0.95
+                bmi = (67 + 13.73 * self.current_weight + 5 * self.height - 6.9 * self.age)
             else:
                 # 基础代谢 女
-                bmi = (665 + 9.6 * self.current_weight + 1.8 * self.height - 4.7 * self.age) * 0.95
+                bmi = (665 + 9.6 * self.current_weight + 1.8 * self.height - 4.7 * self.age)
         return bmi
 
     @property
@@ -198,8 +199,8 @@ class WeightControlFactory:
         """
         week_kacl_total = 0
         for index, val in enumerate(plans):
-
-            print('星期%s' % (index + 1))
+            if len(plans) == 7:
+                print('星期%s' % (index + 1))
 
             week_kacl_total = week_kacl_total + self.pai(val)
         return week_kacl_total
@@ -216,8 +217,9 @@ class WeightControlFactory:
             self.week_food[food_name] = self.week_food.get(food_name) + food.number
         else:
             self.week_food[food_name] = food.number
-        print("")
-        print('  %s\t %s份 (%s/份)\t热量:\t%skcal' % (food.name, '%.2f' % food.number, food.unit, '%.2f' % food.kcal_total))
+        if food.number > 0:
+            print("")
+            print('  %s\t %s 份 (%s/份)\t热量:\t%s kcal' % (food.name, round(food.number, 2), food.unit, ('%.0f' % food.kcal_total)))
 
     def over_fed(self, DB, ZF, TS, prepare_food, record_eat):
 
@@ -273,9 +275,9 @@ class WeightControlFactory:
                 break
         eat = Eat()
         # 保证类型顺序
-        self.judge_eat(DB, ZF, TS, eat, record_eat, prepare_food.get('carbohydrate'))
-        self.judge_eat(DB, ZF, TS, eat, record_eat, prepare_food.get('protein'))
-        self.judge_eat(DB, ZF, TS, eat, record_eat, prepare_food.get('fat'))
+        self.judge_eat(DB, ZF, TS, eat, record_eat, prepare_food.get('carbohydrate', []))
+        self.judge_eat(DB, ZF, TS, eat, record_eat, prepare_food.get('protein', []))
+        self.judge_eat(DB, ZF, TS, eat, record_eat, prepare_food.get('fat', []))
 
 
         # # 剩余可食用脂肪
@@ -285,9 +287,9 @@ class WeightControlFactory:
         kcal_residue = zf_residue * 9 + (db_residue + ts_residue) * 4
         print("")
         print("还可额外摄入:")
-        print("\t脂肪:\t\t %sg" % ('%.0f' % zf_residue))
-        print("\t蛋白质:\t\t %sg" % ('%.0f' % db_residue))
-        print("\t碳水:\t\t %sg" % ('%.0f' % ts_residue))
+        print("\t脂肪:\t\t %sg" % ('%.1f' % zf_residue))
+        print("\t蛋白质:\t\t %sg" % ('%.1f' % db_residue))
+        print("\t碳水:\t\t %sg" % ('%.1f' % ts_residue))
         print("\t相当于:\t\t %skcal" % ('%.0f' % kcal_residue))
         print("")
         return eat.kcal_total
@@ -310,20 +312,25 @@ def simulate(weight, target_weight, food_menu, plans, sex, age, height, activity
     week += 1
     print('')
     print Logger.FAIL + "本周需要准备的食材:"
+    flag = 1
+    if len(plans) == 1:
+        flag = 7
     for k, v in wf.week_food.items():
-        print(Logger.FAIL + "\t%s份\t%s" % ('%.2f' % v,k))
+        if v * flag > 0:
+            print(Logger.FAIL + "\t%s份\t%s" % ('%.1f' % (v * flag), k))
 
     print('')
-
-    print "周平均数据:"
-    print("\t日基础代谢: \t\t%skcal" % ('%.0f' % bmi))
-    print("\t日活动代谢: \t\t%skcal" % ('%.0f' % bee))
-    print("\t日平均摄入: \t\t%skcal" % ('%.0f' % (week_kcal_total / 7)))
-    print("\t日平均热量缺口: \t%skcal" % ('%.0f' % ((week_kcal_total - bee * 7) / 7)))
+    print("基础代谢: \t\t%skcal" % ('%.0f' % bmi))
+    print("活动代谢: \t\t%skcal" % ('%.0f' % bee))
     print('')
-    print("以计划饮食热量推测:")
-    print("\t本周体重预计为: \t%s" % ('%.2f' % wf.current_weight))
-    print("\t周预计燃烧脂肪: \t%s kg" % ('%.2f' % ((week_kcal_total - bee * 7) / 7700)))
+    print "平均数据:"
+    print("\t日平均摄入: \t\t%skcal" % ('%.0f' % (week_kcal_total / len(plans))))
+    print("\t日平均热量缺口: \t%skcal" % ('%.0f' % ((week_kcal_total - bee * len(plans)) / len(plans))))
+    print('')
+    if len(plans) == 7:
+        print("以计划饮食热量推测:")
+        print("\t本周体重预计为: \t%s" % ('%.2f' % wf.current_weight))
+        print("\t周预计燃烧脂肪: \t%s kg" % ('%.2f' % ((week_kcal_total - bee * 7) / 7700)))
     # print("周摄入总热量 %s kcal" % ('%.0f' % week_total))
     if prediction:
         print("减至目标体重%skg 预计还需约 %s周" % (
@@ -378,21 +385,22 @@ class Prepare:
         args = self.parser.parse_args(argv)
         if args.prediction:
             if not args.target_weight:
-                print('指定参数-p 时, 必须指定目标体重 -t')
+                print('指定参数 -p 时, 必须指定目标体重 -t')
                 return
-        if len(args.plans) != 7:
-            print('参数--plans 长度必须为7')
+        if args.prediction and len(args.plans) != 7:
+            print('指定 -p 参数时, 参数--plans 长度必须为7')
             return
         # 食物列表
         food_menu = collections.OrderedDict()
-        food_menu['egg'] = 3
+        food_menu['egg'] = 1
         food_menu['powder'] = 2
-        food_menu['milk'] = 1
+        food_menu['milk'] = 3
         food_menu['beef'] = 1
         food_menu['oil'] = 2
         food_menu['nuts'] = 1
         food_menu['chicken'] = -1
         # 最后再吃碳水类
+        food_menu['glucose'] = 8
         food_menu['oat'] = 2
         food_menu['rice'] = -1
         simulate(args.weight,
