@@ -358,8 +358,8 @@ class Prepare:
                             help="性别",
                             choices=['man', 'woman'])
         parser.add_argument("-w", "--weight", help="当前体重", type=float)
-        parser.add_argument("-a", "--age", help="年龄", type=int)
-        parser.add_argument("-g", "--height", help="身高", type=int)
+        parser.add_argument("-a", "--age", help="年龄", type=int, default=27)
+        parser.add_argument("-g", "--height", help="身高", type=int, default=180)
         parser.add_argument("--bfr", help="体脂率", type=float, default=0.0)
         parser.add_argument("--activity", help="活动强度",
                             type=float,
