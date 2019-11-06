@@ -22,30 +22,35 @@ nutrient_map = {
         "DB": 1.8,
         "ZF": 1.2,
         "TS": 3.5,
+        "exclude_foods": ['glucose'],
     },
     "middle": {
         "alias": "中碳日",
         "DB": 1.8,
         "ZF": 1.2,
         "TS": 2.5,
+        "exclude_foods": ['glucose'],
     },
     "low": {
         "alias": "低碳日",
         "DB": 2,
         "ZF": 1.2,
         "TS": 1.5,
+        "exclude_foods": ['glucose'],
     },
     "none": {
         "alias": "断碳日",
         "DB": 2,
         "ZF": 1.2,
         "TS": 0.5,
+        "exclude_foods": ['glucose'],
     },
     "increase": {
         "alias": "增肌日",
         "DB": 1.8,
         "ZF": 1.2,
         "TS": 4,
+        "exclude_foods": [],
     },
 }
 
@@ -178,7 +183,7 @@ class WeightControlFactory:
         print("\t碳水\t\t %sg" % ('%.0f' % TS))
         print('')
         print('参考饮食可食用食物份量:')
-        practical_kcal = self.reference_food(DB, ZF, TS)
+        practical_kcal = self.reference_food(DB, ZF, TS, schema)
         print("")
         print("计划饮食总热量: %skcal" % ('%.0f' % plan_kcal_total))
         print("参考饮食总热量: %skcal" % ('%.2f' % practical_kcal))
@@ -246,12 +251,14 @@ class WeightControlFactory:
 
             self.write_off_weight(eat, food)
 
-    def reference_food(self, DB, ZF, TS):
+    def reference_food(self, DB, ZF, TS, schema):
         """参考食用的食物"""
         prepare_food = {}
         record_eat = Eat()
         # 先添加指定数量的食物
         for food_name, number in self.food_menu.items():
+            if food_name in nutrient_map[schema]['exclude_foods']:
+                continue
             if number < 0:
                 # 如果数量小于 0 , 指定默认值10
                 number = 10
