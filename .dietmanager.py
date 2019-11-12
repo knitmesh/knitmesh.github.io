@@ -124,11 +124,18 @@ nutrient_map = {
         "TS": 0.5,
         "exclude_foods": ['glucose', 'milk', 'egg', 'oat', 'powder'],
     },
+    "rest": {
+        "alias": "修整日",
+        "DB": 2.2,
+        "ZF": 1.2,
+        "TS": 4.5,
+        "exclude_foods": ['glucose'],
+    },
     "increase": {
         "alias": "增肌日",
-        "DB": 1.8,
+        "DB": 2.2,
         "ZF": 1.2,
-        "TS": 4,
+        "TS": 4.5,
         "exclude_foods": [],
     },
 }
@@ -246,12 +253,12 @@ class WeightControlFactory:
                     food.sub(0.1)
             if food.type == 'fat' and ZF < record_eat.fat_total:
                 while food.number > 0:
-                    if ZF > (eat.protein_total + food.protein_total):
+                    if ZF > (eat.fat_total + food.fat_total):
                         break
                     food.sub(0.1)
             if food.type == 'carbohydrate' and TS < record_eat.carbohydrate_total:
                 while food.number > 0:
-                    if TS > (eat.protein_total + food.protein_total):
+                    if TS > (eat.carbohydrate_total + food.carbohydrate_total):
                         break
                     food.sub(0.1)
 
@@ -400,7 +407,7 @@ class Prepare:
                             help="碳水循环参数",
                             type=str,
                             default=["middle", "low", "middle", "middle", "low", "none", "high"],
-                            choices=["middle", "low", "none", "high", "increase"]
+                            choices=["middle", "low", "none", "high", "increase", "rest"]
                             )
 
         group = parser.add_argument_group('prediction weight')
@@ -424,12 +431,12 @@ class Prepare:
         food_menu['egg'] = 3
         food_menu['powder'] = 2
         food_menu['milk'] = 3
-        food_menu['beef'] = 1
+        food_menu['beef'] = 3
         food_menu['oil'] = 4
-        food_menu['nuts'] = 3
+        food_menu['nuts'] = 4
         food_menu['chicken'] = -1
         # 最后再吃碳水类
-        food_menu['glucose'] = 8
+        food_menu['glucose'] = 6
         food_menu['oat'] = 2
         food_menu['rice'] = -1
         simulate(args.weight,
