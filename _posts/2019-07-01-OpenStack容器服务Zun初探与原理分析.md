@@ -73,7 +73,7 @@ enable_plugin kuryr-libnetwork https://github.com/openstack/kuryr-libnetwork
 通过命令行创建容器也非常类似，使用过nova以及docker命令行的基本不会有困难，下面以创建一个mysql容器为例:
 
 ```bash
-zun run -n int32bit-mysql-1 --hostname int32bit-mysql-1 \
+zun run -n jingh-mysql-1 --hostname jingh-mysql-1 \
     --cpu 2 -m 1024 \
     -e MYSQL_ROOT_PASSWORD='mysql1234' \
     --net network=ff981105-c56d-42a9-933e-13ba0695c064 \
@@ -90,7 +90,7 @@ zun run -n int32bit-mysql-1 --hostname int32bit-mysql-1 \
 另外mysql容器初始化时数据卷必须为空目录，挂载的volume新卷格式化时会自动创建`lost+found`目录，因此需要手动删除，否则mysql容器会初始化失败:
 
 ```sh
-NAME=int32bit-mysql-1
+NAME=jingh-mysql-1
 UUID=$(zun list --name "$NAME" | grep "$NAME" | awk -F '|' '{print $2}' | tr -d ' ')
 CONTAINER_NAME=zun-${UUID}
 HOST_PATH=$(docker inspect \
@@ -107,8 +107,8 @@ root@DevStack:~# zun list
 | uuid                                 | name               | image          | status  | task_state | addresses       | ports         |
 +--------------------------------------+--------------------+----------------+---------+------------+-----------------+---------------+
 | 546b8613-118d-4e4e-80a2-216616132684 | mysql-server-1     | mysql:8        | Running | None       | 192.168.233.11  | [3306, 33060] |
-| 9344f411-d44e-4571-9604-58d49c2ccbef | int32bit-mysql-1   | mysql:8        | Running | None       | 192.168.233.80  | [3306, 33060] |
-| f12699a1-bed3-456b-846d-34593b86bf58 | int32bit-busybox-1 | busybox:latest | Running | None       | 192.168.233.152 | []            |
+| 9344f411-d44e-4571-9604-58d49c2ccbef | jingh-mysql-1   | mysql:8        | Running | None       | 192.168.233.80  | [3306, 33060] |
+| f12699a1-bed3-456b-846d-34593b86bf58 | jingh-busybox-1 | busybox:latest | Running | None       | 192.168.233.152 | []            |
 +--------------------------------------+--------------------+----------------+---------+------------+-----------------+---------------+
 ```
 
@@ -116,7 +116,7 @@ root@DevStack:~# zun list
 
 ```bash
 #!/bin/bash
-NAME=int32bit-mysql-1
+NAME=jingh-mysql-1
 FLOATING_NETWORK=cdf8cd3c-5a46-4fdb-8e8a-c597b1d15244
 CONTAINER_UUID=$(zun list --name "$NAME" \
     | grep "$NAME" | awk -F '|' '{print $2}' | tr -d ' ')
@@ -313,7 +313,7 @@ def _new_websocket_client(self, container, token, uuid):
 
 ### 4.3 使用Cinder实现容器持久化存储
 
-前面介绍过Zun通过Cinder实现container的持久化存储，之前我的另一篇文章介绍了[Docker使用OpenStack Cinder持久化volume原理分析及实践](http://int32bit.me/2017/10/04/Docker%E4%BD%BF%E7%94%A8OpenStack-Cinder%E6%8C%81%E4%B9%85%E5%8C%96volume%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90%E5%8F%8A%E5%AE%9E%E8%B7%B5/)，介绍了john griffith开发的docker-cinder-driver以及OpenStack Fuxi项目，这两个项目都实现了Cinder volume挂载到Docker容器中。另外cinderclient的扩展模块[python-brick-cinderclient-ext](https://specs.openstack.org/openstack/cinder-specs/specs/mitaka/use-cinder-without-nova.html)实现了Cinder volume的local attach，即把Cinder volume挂载到物理机中。
+前面介绍过Zun通过Cinder实现container的持久化存储，之前我的另一篇文章介绍了[Docker使用OpenStack Cinder持久化volume原理分析及实践](http://www.jingh.top/2017/10/04/Docker%E4%BD%BF%E7%94%A8OpenStack-Cinder%E6%8C%81%E4%B9%85%E5%8C%96volume%E5%8E%9F%E7%90%86%E5%88%86%E6%9E%90%E5%8F%8A%E5%AE%9E%E8%B7%B5/)，介绍了john griffith开发的docker-cinder-driver以及OpenStack Fuxi项目，这两个项目都实现了Cinder volume挂载到Docker容器中。另外cinderclient的扩展模块[python-brick-cinderclient-ext](https://specs.openstack.org/openstack/cinder-specs/specs/mitaka/use-cinder-without-nova.html)实现了Cinder volume的local attach，即把Cinder volume挂载到物理机中。
 
 Zun没有复用以上的代码模块，而是重新实现了volume attach的功能，不过实现原理和上面的方法完全一样，主要包含如下过程：
 
@@ -431,7 +431,7 @@ OpenStack Zun项目非常完美地实现了容器与Neutron、Cinder的集成，
 1. docker python sdk: https://docker-py.readthedocs.io/en/stable/
 2. Zun’s documentation: https://docs.openstack.org/zun/latest/
 3. attach to a container via websocket: https://docs.docker.com/engine/api/v1.39/#operation/ContainerAttachWebsocket
-4. http://int32bit.me/2017/10/04/Docker使用OpenStack-Cinder持久化volume原理分析及实践/
+4. http://www.jingh.top/2017/10/04/Docker使用OpenStack-Cinder持久化volume原理分析及实践/
 5. https://specs.openstack.org/openstack/cinder-specs/specs/mitaka/use-cinder-without-nova.html
 6. https://docs.docker.com/engine/extend/plugin_api/
 7. https://github.com/docker/libnetwork/blob/master/docs/design.md

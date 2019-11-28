@@ -35,7 +35,7 @@ OpenStack项目越来越多，功能越来越全面，同时服务也越来越�
 
 ## 2 工欲善其事必先利其器
 
-要阅读源代码首先需要安装科学的代码阅读工具，图形界面使用pycharm没有问题，不过通常在虚拟机或者测试服务器是没有图形界面的，因此首推vim，需要简单的配置使其支持代码跳转和代码搜索，可以参考我的dotfiles：[GitHub - int32bit/dotfiles: A set of vim, zsh, git, and tmux configuration files.](https://github.com/int32bit/dotfiles)。如图：
+要阅读源代码首先需要安装科学的代码阅读工具，图形界面使用pycharm没有问题，不过通常在虚拟机或者测试服务器是没有图形界面的，因此首推vim，需要简单的配置使其支持代码跳转和代码搜索，可以参考我的dotfiles：[GitHub - jingh/dotfiles: A set of vim, zsh, git, and tmux configuration files.](https://github.com/jingh/dotfiles)。如图：
 
 ![vim demo](/img/posts/如何阅读OpenStack源码/vim.png)
 
@@ -122,7 +122,7 @@ def create(self, req, body):
 su -c 'nova-api' nova
 ```
 
-此时在另一个终端创建一个新的虚拟机，调用创建虚拟机API，nova-api进程就会马上弹出pdb shell，此时你可以通过`s`或者`n`命令一步一步执行了。更多关于OpenStack调试技巧可参考我的另一篇文章[《OpenStack断点调试方法总结》](http://int32bit.me/2019/04/25/OpenStack%E6%96%AD%E7%82%B9%E8%B0%83%E8%AF%95%E6%96%B9%E6%B3%95/)。
+此时在另一个终端创建一个新的虚拟机，调用创建虚拟机API，nova-api进程就会马上弹出pdb shell，此时你可以通过`s`或者`n`命令一步一步执行了。更多关于OpenStack调试技巧可参考我的另一篇文章[《OpenStack断点调试方法总结》](http://www.jingh.top/2019/04/25/OpenStack%E6%96%AD%E7%82%B9%E8%B0%83%E8%AF%95%E6%96%B9%E6%B3%95/)。
 
 ## 4 OpenStack项目代码框架
 
@@ -369,4 +369,4 @@ build_and_run_instance()
 
 以上是创建虚拟机的各个服务的交互过程以及调用关系，需要注意的是，所有的数据库操作，比如`instance.save（）`以及`update`操作，如果配置`use_local`为`false`，则会向`nova-conductor`发起RPC调用，由`nova-conductor`代理完成数据库更新，而不是由`nova-compute`直接访问数据库，这里的RPC调用过程在以上的分析中省略了。
 
-如果你对OpenStack的其它服务以及操作流程感兴趣，可以参考我的[openstack-workflow](https://github.com/int32bit/openstack-workflow)项目。
+如果你对OpenStack的其它服务以及操作流程感兴趣，可以参考我的[openstack-workflow](https://github.com/jingh/openstack-workflow)项目。

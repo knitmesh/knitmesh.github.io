@@ -108,8 +108,8 @@ resource "aws_instance" "example" {
   ami           = "ami-0829e595217a759b9"
   instance_type = "t2.micro"
   tags = {
-    "Owner"   = "int32bit"
-    "Name"    = "int32bit-test-ft"
+    "Owner"   = "jingh"
+    "Name"    = "jingh-test-ft"
   }
 }
 ```
@@ -139,8 +139,8 @@ Terraform will perform the following actions:
       + ami                          = "ami-0829e595217a759b9"
       + arn                          = (known after apply)
            + tags                         = {
-          + "Name"  = "int32bit-test-ft"
-          + "Owner" = "int32bit"
+          + "Name"  = "jingh-test-ft"
+          + "Owner" = "jingh"
         }
       + vpc_security_group_ids       = (known after apply)
       + ...
@@ -192,8 +192,8 @@ resource "aws_instance" "example" {
     instance_type                = "t2.micro"
     private_ip                   = "172.31.29.5"
     tags                         = {
-        "Name"    = "int32bit-test-ft"
-        "Owner"   = "int32bit"
+        "Name"    = "jingh-test-ft"
+        "Owner"   = "jingh"
     }
     root_block_device {
         delete_on_termination = true
@@ -217,8 +217,8 @@ resource "aws_instance" "example" {
   ami           = "ami-0829e595217a759b9"
   instance_type = "t2.micro"
   tags = {
-    "Owner" = "int32bit"
-    "Name"  = "int32bit-test-ft"
+    "Owner" = "jingh"
+    "Name"  = "jingh-test-ft"
     "Newkey" = "test_new_key"
   }
 }
@@ -239,9 +239,9 @@ Terraform will perform the following actions:
   ~ resource "aws_instance" "example" {
       /* ... */
       ~ tags                         = {
-            "Name"   = "int32bit-test-ft"
+            "Name"   = "jingh-test-ft"
           + "Newkey" = "test_new_key"
-            "Owner"  = "int32bit"
+            "Owner"  = "jingh"
         }
      }
 Plan: 0 to add, 1 to change, 0 to destroy.
@@ -263,8 +263,8 @@ resource "aws_instance" "example" {
   ami           = "ami-08af324f69cf03287"
   instance_type = "t2.micro"
   tags = {
-    "Owner" = "int32bit"
-    "Name"  = "int32bit-test-ft"
+    "Owner" = "jingh"
+    "Name"  = "jingh-test-ft"
     "Newkey" = "test_new_key"
   }
 }
@@ -288,9 +288,9 @@ Terraform will perform the following actions:
       ~ instance_state               = "running" -> (known after apply)
       ~ private_ip                   = "172.31.29.5" -> (known after apply)
         tags                         = {
-            "Name"   = "int32bit-test-ft"
+            "Name"   = "jingh-test-ft"
             "Newkey" = "test_new_key"
-            "Owner"  = "int32bit"
+            "Owner"  = "jingh"
         }
       ~ root_block_device {
           ~ delete_on_termination = true -> (known after apply)
@@ -332,8 +332,8 @@ resource "aws_instance" "example" {
   ami           = "ami-08af324f69cf03287"
   instance_type = "t2.micro"
   tags = {
-    "Owner"  = "int32bit"
-    "Name"   = "int32bit-test-ft"
+    "Owner"  = "jingh"
+    "Name"   = "jingh-test-ft"
     "Newkey" = "test_new_key"
   }
 }
@@ -386,8 +386,8 @@ resource "aws_instance" "example" {
   ami           = var.image_id
   instance_type = var.instance_type
   tags = {
-    "Owner"  = "int32bit"
-    "Name"   = "int32bit-test-ft"
+    "Owner"  = "jingh"
+    "Name"   = "jingh-test-ft"
     "Newkey" = "test_new_key"
   }
 }
@@ -529,8 +529,8 @@ resource "aws_instance" "example" {
   ami           = data.aws_ami.my_image.id
   instance_type = var.instance_type
   tags = {
-    "Owner"  = "int32bit"
-    "Name"   = "int32bit-test-ft"
+    "Owner"  = "jingh"
+    "Name"   = "jingh-test-ft"
     "Newkey" = "test_new_key"
   }
 }

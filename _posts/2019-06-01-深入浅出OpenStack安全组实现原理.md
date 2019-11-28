@@ -148,21 +148,21 @@ OpenStack安全组最开始是通过Nova管理及配置的，引入Neutron后，
 Neutron通过`security-group-create`子命令创建安全组，参数只有一个`name`，即安全组名称:
 
 ```
-neutron security-group-create int32bit-test-secgroup-1
+neutron security-group-create jingh-test-secgroup-1
 ```
 
 不过Neutron创建的新安全组并不是一个空规则安全组，而是会自动添加两条默认规则:
 
 ```
-int32bit # neutron security-group-rule-list  \
+jingh # neutron security-group-rule-list  \
     -F security_group \
     -F ethertype \
     -F remote \
     -F port/protocol \
     -F direction \
-    | grep int32bit-test-secgroup-1
-| int32bit-test-secgroup-1 | egress| IPv6| any| any|
-| int32bit-test-secgroup-1 | egress| IPv4| any| any|
+    | grep jingh-test-secgroup-1
+| jingh-test-secgroup-1 | egress| IPv6| any| any|
+| jingh-test-secgroup-1 | egress| IPv4| any| any|
 ```
 
 即禁止所有的流量访问，允许所有的流量出去。
@@ -179,14 +179,14 @@ int32bit # neutron security-group-rule-list  \
 创建一条安全组规则只允许192.168.4.5访问虚拟机SSH 22端口：
 
 ```bash
-int32bit # neutron security-group-rule-create \
+jingh # neutron security-group-rule-create \
 >     --direction ingress \
 >     --ethertype ipv4 \
 >     --protocol tcp \
 >     --port-range-min 22 \
 >     --port-range-max 22 \
 >     --remote-ip-prefix 192.168.4.5/32 \
->     int32bit-test-secgroup-1
+>     jingh-test-secgroup-1
 Created a new security_group_rule:
 +-------------------+--------------------------------------+
 | Field             | Value                                |
@@ -216,7 +216,7 @@ Created a new security_group_rule:
 ```bash
 VM_UUID=38147993-08f3-4798-a9ab-380805776a40
 PORT_UUID=$(neutron port-list -F id -f value -- --device_id=${VM_UUID})
-neutron port-update --security-group int32bit-test-secgroup-1 ${PORT_UUID}
+neutron port-update --security-group jingh-test-secgroup-1 ${PORT_UUID}
 ```
 
 安全组命令操作参数较多，相对复杂，可以通过Dashboard图形界面操作，如图：
@@ -272,12 +272,12 @@ Linux网络虚拟化支持linux bridge以及openvswitch（简称OVS），OpenSta
 
 ## 3.3 安全组规则定义
 
-为了便于后面的测试，我提前创建了一台虚拟机`int32bit-server-1`，IP为192.168.100.10/24，port UUID为`3b90700f-1b33-4495-9d64-b41d7dceebd5`，并添加到了之前创建的`int32bit-test-secgroup-1`安全组。
+为了便于后面的测试，我提前创建了一台虚拟机`jingh-server-1`，IP为192.168.100.10/24，port UUID为`3b90700f-1b33-4495-9d64-b41d7dceebd5`，并添加到了之前创建的`jingh-test-secgroup-1`安全组。
 
-我们先导出本计算节点的所有tap设备对应Neutron的port，该脚本在github[int32bit/OpenStack_Scripts](https://github.com/int32bit/OpenStack_Scripts)可以下载:
+我们先导出本计算节点的所有tap设备对应Neutron的port，该脚本在github[jingh/OpenStack_Scripts](https://github.com/jingh/OpenStack_Scripts)可以下载:
 
 ```sh
-int32bit # ./dump_all_taps.sh
+jingh # ./dump_all_taps.sh
 tap8ea41395-1e: 8ea41395-1e13-4b44-a185-0b0f6d75ba9e  192.168.100.254 fa:16:3e:c3:0e:a0 network:router_interface
 tap6fee5e4d-56: 6fee5e4d-5655-4411-b85b-db8da2e8f69e  192.168.100.1 fa:16:3e:63:88:59 network:dhcp
 tap3b90700f-1b: 3b90700f-1b33-4495-9d64-b41d7dceebd5  192.168.100.10 fa:16:3e:a0:59:ba compute:nova
@@ -286,7 +286,7 @@ tap3b90700f-1b: 3b90700f-1b33-4495-9d64-b41d7dceebd5  192.168.100.10 fa:16:3e:a0
 根据前面的分析，虚拟机安全组是定义在filter表的FORWARD链上的，我们查看该链的规则:
 
 ```bash
-int32bit # iptables -n --line-numbers -L FORWARD
+jingh # iptables -n --line-numbers -L FORWARD
 Chain FORWARD (policy ACCEPT)
 num  target     prot opt source               destination
 1    neutron-filter-top  all  --  0.0.0.0/0            0.0.0.0/0
@@ -298,7 +298,7 @@ FORWARD链先跳到`neutron-filter-top`子链上，`neutron-filter-top`链会又
 返回到FORWARD链后继续匹配第2条规则，跳转到了`neutron-openvswi-FORWARD`，我们查看该链的规则:
 
 ```
-int32bit # iptables -n --line-numbers -L neutron-openvswi-FORWARD
+jingh # iptables -n --line-numbers -L neutron-openvswi-FORWARD
 Chain neutron-openvswi-FORWARD (1 references)
 num  target     prot opt source               destination
 1    ACCEPT     all  --  0.0.0.0/0            0.0.0.0/0  
@@ -318,7 +318,7 @@ num  target     prot opt source               destination
 我们继续查看`neutron-openvswi-sg-chain`查看链:
 
 ```
-int32bit # iptables -n --line-numbers -L neutron-openvswi-sg-chain
+jingh # iptables -n --line-numbers -L neutron-openvswi-sg-chain
 Chain neutron-openvswi-sg-chain (4 references)
 num  target     prot opt source               destination
 1    neutron-openvswi-i3b90700f-1  all  --  0.0.0.0/0            0.0.0.0/0
@@ -340,7 +340,7 @@ num  target     prot opt source               destination
 由3.3我们了解到，安全组入访规则链为`neutron-openvswi-i3b90700f-1`，我们查看该链规则:
 
 ```
-int32bit # iptables -n --line-numbers -L neutron-openvswi-i3b90700f-1
+jingh # iptables -n --line-numbers -L neutron-openvswi-i3b90700f-1
 Chain neutron-openvswi-i3b90700f-1 (1 references)
 num  target     prot opt source               destination
 1    RETURN     all  --  0.0.0.0/0            0.0.0.0/0            state RELATED,ESTABLISHED
@@ -366,7 +366,7 @@ num  target     prot opt source               destination
 由3.3我们了解到，安全组入访规则链为`neutron-openvswi-o3b90700f-1`，我们查看该链规则:
 
 ```
-int32bit # iptables -n --line-numbers -L neutron-openvswi-o3b90700f-1
+jingh # iptables -n --line-numbers -L neutron-openvswi-o3b90700f-1
 Chain neutron-openvswi-o3b90700f-1 (2 references)
 num  target     prot opt source               destination
 1    RETURN     udp  --  0.0.0.0              255.255.255.255      udp spt:68 dpt:67
@@ -393,14 +393,14 @@ num  target     prot opt source               destination
 
 前面2.3节提到，安全组不仅支持通过IP地址段作为源或者目标的匹配条件，还支持通过指定另一个安全组，这种情况怎么处理呢。
 
-为了测试我把创建了一个新的安全组int32bit-test-secgroup-2以及新的虚拟机int32bit-server-2(192.168.100.7)，并且int32bit-server-2关联了安全组int32bit-test-secgroup-2。
+为了测试我把创建了一个新的安全组jingh-test-secgroup-2以及新的虚拟机jingh-server-2(192.168.100.7)，并且jingh-server-2关联了安全组jingh-test-secgroup-2。
 
-同时在int32bit-test-secgroup-1上增加一条入访规则，允许关联int32bit-test-secgroup-2的虚拟机访问8080端口:
+同时在jingh-test-secgroup-1上增加一条入访规则，允许关联jingh-test-secgroup-2的虚拟机访问8080端口:
 
 ```bash
 SECURITY_GROUP_UUID=$(neutron security-group-list \
     -F id -f value \
-    --name=int32bit-test-secgroup-2
+    --name=jingh-test-secgroup-2
 )
 neutron security-group-rule-create \
     --direction ingress \
@@ -409,13 +409,13 @@ neutron security-group-rule-create \
     --port-range-min 8080 \
     --port-range-max 8080 \
     --remote-group-id ${SECURITY_GROUP_UUID} \
-    int32bit-test-secgroup-1
+    jingh-test-secgroup-1
 ```
 
 我们查看虚拟机入访规则链`neutron-openvswi-i3b90700f-1`:
 
 ```
-int32bit # iptables -n --line-numbers -L neutron-openvswi-i3b90700f-1
+jingh # iptables -n --line-numbers -L neutron-openvswi-i3b90700f-1
 Chain neutron-openvswi-i3b90700f-1 (1 references)
 num  target     prot opt source               destination
 1    RETURN     all  --  0.0.0.0/0            0.0.0.0/0            state RELATED,ESTABLISHED
@@ -433,7 +433,7 @@ num  target     prot opt source               destination
 我们查看该ipset：
 
 ```bash
-int32bit # ipset list NIPv4fc83d82a-5b5d-4c90-80b0-
+jingh # ipset list NIPv4fc83d82a-5b5d-4c90-80b0-
 Name: NIPv4fc83d82a-5b5d-4c90-80b0-
 Type: hash:net
 Revision: 3
@@ -455,7 +455,7 @@ Members:
 我们首先查看下里面的规则:
 
 ```
-int32bit # iptables -n --line-numbers -L neutron-openvswi-s3b90700f-1
+jingh # iptables -n --line-numbers -L neutron-openvswi-s3b90700f-1
 Chain neutron-openvswi-s3b90700f-1 (1 references)
 num  target     prot opt source               destination
 1    RETURN     all  --  192.168.100.10       0.0.0.0/0            MAC FA:16:3E:A0:59:BA
@@ -476,7 +476,7 @@ neutron port-update --allowed-address-pair ip_address=192.168.0.100 ${port_id_2}
 添加后我们再查看下`neutron-openvswi-s3b90700f-1`链规则:
 
 ```
-int32bit # iptables -n --line-numbers -L neutron-openvswi-s3b90700f-1
+jingh # iptables -n --line-numbers -L neutron-openvswi-s3b90700f-1
 Chain neutron-openvswi-s3b90700f-1 (1 references)
 num  target     prot opt source               destination
 1    RETURN     all  --  192.168.0.100        0.0.0.0/0            MAC FA:16:3E:A0:59:BA 
@@ -505,12 +505,12 @@ num  target     prot opt source               destination
 我们查看INPUT链规则:
 
 ```
-int32bit # iptables -n --line-numbers -L INPUT
+jingh # iptables -n --line-numbers -L INPUT
 Chain INPUT (policy ACCEPT)
 num  target     prot opt source               destination
 1    neutron-openvswi-INPUT  all  --  0.0.0.0/0            0.0.0.0/0
 
-int32bit # iptables -n --line-numbers -L neutron-openvswi-INPUT
+jingh # iptables -n --line-numbers -L neutron-openvswi-INPUT
 Chain neutron-openvswi-INPUT (1 references)
 num  target     prot opt source               destination
 1    neutron-openvswi-o3b90700f-1  all  --  0.0.0.0/0  0.0.0.0/0

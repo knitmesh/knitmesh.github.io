@@ -38,7 +38,7 @@ $(curl -sSL http://169.254.169.254/latest/meta-data/local-hostname)
 Kubernetes需要知道哪些AWS资源是属于这个集群的，哪些是可以使用的，比如Kubernetes创建Service时为了暴露互联网访问需要修改EC2实例的安全组，但通常一个EC2实例可能会挂多个安全组，有些安全组是基线安全组，供一些公共服务如堡垒机使用，用户肯定不期望Kubernetes把这些安全组规则也改了。因此Kubernetes要求用户必须给资源打上标签，通过标签的方式告诉Kubernetes哪些资源可以用，其中有两个标签是必须的:
 
 * `KubernetesCluster`: 配置Kubernetes cluster名称，对应部署Kubernetes时kubeadm的`clusterName`参数，因为一个Account下可能有多个Kubernetes集群，通过这个参数用于区分是哪个集群。
-* `kubernetes.io/cluster/int32bit-kubernetes`: 填写`shared`或者`owned`，即是否允许多个集群共享这些资源。
+* `kubernetes.io/cluster/jingh-kubernetes`: 填写`shared`或者`owned`，即是否允许多个集群共享这些资源。
 
 这些标签需要打到所有要使用的资源上，包括EC2实例、安全组、子网，当然不使用的则不打，比如不需要Kubernetes托管的安全组就不要打上如上标签。
 
@@ -196,7 +196,7 @@ ol
 
 Pod网络能够与VPC集成，比如OpenStack Kuryr项目就实现了Kubernetes网络与Neutron集成。
 
-在之前的文章[聊聊几种主流Docker网络的实现原理](https://int32bit.me/2019/09/02/聊聊几种主流Docker网络的实现原理/)中介绍了使用Flannel的aws-vpc后端实现容器的跨主机通信，其原理是把路由配置到AWS VPC路由表中。容器使用的网络IP地址是Flannel分配和维护的，和VPC的网络地址完全独立。这就会有一个问题，AWS VPC Peer为了防止IP/APR欺骗会强制检查目标IP地址，如果不是对端VPC的IP，则会直接丢弃，因此Flannel aws-vpc虽然能实现跨子网通信，但无法实现跨VPC的通信。
+在之前的文章[聊聊几种主流Docker网络的实现原理](https://www.jingh.top/2019/09/02/聊聊几种主流Docker网络的实现原理/)中介绍了使用Flannel的aws-vpc后端实现容器的跨主机通信，其原理是把路由配置到AWS VPC路由表中。容器使用的网络IP地址是Flannel分配和维护的，和VPC的网络地址完全独立。这就会有一个问题，AWS VPC Peer为了防止IP/APR欺骗会强制检查目标IP地址，如果不是对端VPC的IP，则会直接丢弃，因此Flannel aws-vpc虽然能实现跨子网通信，但无法实现跨VPC的通信。
 
 amazon-vpc-cni-k8s是AWS自己维护的开源项目，实现了CNI接口与AWS VPC集成，Pod能直接分配到与Node节点相同子网的IP地址，和EC2虚拟机共享VPC资源，使得Pod和EC2实例实现网络功能上平行，能够充分复用VPC原有的功能，如安全组、vpc flow logs、ACL等。并且由于Pod IP就是VPC的IP，因此能够通过VPC Peer隧道实现跨VPC通信。
 
@@ -314,7 +314,7 @@ default via 169.254.1.1 dev eth0
 169.254.1.1 dev eth0 lladdr fe:2c:94:74:24:25 PERMANENT
 ```
 
-看过我之前的文章[聊聊几种主流Docker网络的实现原理](https://int32bit.me/2019/09/02/%E8%81%8A%E8%81%8A%E5%87%A0%E7%A7%8D%E4%B8%BB%E6%B5%81Docker%E7%BD%91%E7%BB%9C%E7%9A%84%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86/)可以发现，和Calico非常类似，容器的IP是32位的，网关为一个假IP 169.254.1.1（IP其实是什么无所谓），而这个假IP的MAC地址为veth对端eni `eni7efd263cb92`的MAC地址。换句话说，从容器出去的包会把MAC地址修改为veth pair对端eni `eni7efd263cb92`的MAC地址。
+看过我之前的文章[聊聊几种主流Docker网络的实现原理](https://www.jingh.top/2019/09/02/%E8%81%8A%E8%81%8A%E5%87%A0%E7%A7%8D%E4%B8%BB%E6%B5%81Docker%E7%BD%91%E7%BB%9C%E7%9A%84%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86/)可以发现，和Calico非常类似，容器的IP是32位的，网关为一个假IP 169.254.1.1（IP其实是什么无所谓），而这个假IP的MAC地址为veth对端eni `eni7efd263cb92`的MAC地址。换句话说，从容器出去的包会把MAC地址修改为veth pair对端eni `eni7efd263cb92`的MAC地址。
 
 我们查看Pod所在的Node节点主机网络信息如下:
 
@@ -457,16 +457,16 @@ kubectl apply -f alb-ingress-controller.yaml
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: "int32bit-aws-alb-ingress"
+  name: "jingh-aws-alb-ingress"
   annotations:
     kubernetes.io/ingress.class: alb
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 18080}]'
   labels:
-    app: int32bit-aws-alb-ingress
+    app: jingh-aws-alb-ingress
 spec:
   rules:
-    - host: test.int32bit.me
+    - host: test.www.jingh.top
       http:
         paths:
         - path: /v1
@@ -482,7 +482,7 @@ spec:
 如上定义的访问规则为:
 
 ```
-if host == "test.int32bit.me":
+if host == "test.www.jingh.top":
   if path == "/v1":
     redirect to service kubernetes-bootcamp-v1
   elif path == "/v2":
@@ -499,14 +499,14 @@ else:
 
 ```
 # kubectl describe ingresses.
-Name:             int32bit-aws-alb-ingress
+Name:             jingh-aws-alb-ingress
 Namespace:        default
-Address:          82e05f75-default-int32bita-5196-1991518503.cn-northwest-1.elb.amazonaws.com.cn
+Address:          82e05f75-default-jingha-5196-1991518503.cn-northwest-1.elb.amazonaws.com.cn
 Default backend:  default-http-backend:80 (<none>)
 Rules:
   Host            Path  Backends
   ----            ----  --------
-  test.int32bit.me
+  test.www.jingh.top
                    /v1   kubernetes-bootcamp-v1:8080 (10.244.3.241:8080,10.244.4.6:8080,10.244.5.2:8080)
                    /v2   kubernetes-bootcamp-v2:8080 (10.244.3.242:8080,10.244.4.7:8080,10.244.5.3:8080)
 Annotations:
@@ -516,23 +516,23 @@ Annotations:
 ```
 
 
-其中Address为ALB的DNS域名。为了访问我们的Ingress服务，通常还需要到域名服务器上添加一个CNAME记录test.int32bit.me到这个域名，这里为了测试直接修改了本地/etc/hosts文件:
+其中Address为ALB的DNS域名。为了访问我们的Ingress服务，通常还需要到域名服务器上添加一个CNAME记录test.www.jingh.top到这个域名，这里为了测试直接修改了本地/etc/hosts文件:
 
 ```
-# dig +short 82e05f75-default-int32bita-5196-1991518503.cn-northwest-1.elb.amazonaws.com.cn
+# dig +short 82e05f75-default-jingha-5196-1991518503.cn-northwest-1.elb.amazonaws.com.cn
 52.83.70.253
 161.189.46.130
-# echo "161.189.46.130 test.int32bit.me" >>/etc/hosts
+# echo "161.189.46.130 test.www.jingh.top" >>/etc/hosts
 ```
 
 此时我们访问Ingress服务如下：
 
 ```
-# curl test.int32bit.me:18080/v1
+# curl test.www.jingh.top:18080/v1
 Hello Kubernetes bootcamp! | Running on: kubernetes-bootcamp-v1-c5ccf9784-cmw2t | v=1
-# curl test.int32bit.me:18080/v2
+# curl test.www.jingh.top:18080/v2
 Hello Kubernetes bootcamp! | Running on: kubernetes-bootcamp-v2-569df8ddd5-hthwp | v=2
-# curl -I test.int32bit.me:18080/v3
+# curl -I test.www.jingh.top:18080/v3
 HTTP/1.1 404 Not Found
 Server: awselb/2.0
 Date: Sat, 23 Nov 2019 10:13:54 GMT
@@ -603,7 +603,7 @@ kubeadm join --config ~/kubeadm.yaml
 ASG打上如下两个标签:
 
 * k8s.io/cluster-autoscaler/enabled: 1
-* k8s.io/cluster-autoscaler/int32bit-kubernetes: 1
+* k8s.io/cluster-autoscaler/jingh-kubernetes: 1
 
 ### 7.2 安装Cluster Autoscaler
 

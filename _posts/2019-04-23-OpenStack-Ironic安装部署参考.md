@@ -441,7 +441,7 @@ systemctl restart openstack-ironic-conductor
 使用nova启动裸机时，添加 `--config-drive true`：
 
 ```
-nova boot --config-drive true --image $IMAGE --flavor $FLAVOR --nic net-id=$NETWORK --key-name=$KEY_NAME int32bit-test-$COUNT
+nova boot --config-drive true --image $IMAGE --flavor $FLAVOR --nic net-id=$NETWORK --key-name=$KEY_NAME jingh-test-$COUNT
 ```
 
 ### 5.3 Bond配置

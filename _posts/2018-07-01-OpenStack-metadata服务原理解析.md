@@ -79,7 +79,7 @@ OpenStack虚拟机也是通过`http://169.254.169.254`获取虚拟机的初始�
 
 ```json
 $ curl -sL 169.254.169.254/openstack/latest/meta_data.json
-{"uuid": "daf32a70-42c9-4d30-8ec5-3a5d97582cff", "availability_zone": "nova", "hostname": "int32bit-test-1.novalocal", "launch_index": 0, "devices": [], "project_id": "ca17d50f6ac049928cc2fb2217dab93b", "name": "int32bit-test-1"}
+{"uuid": "daf32a70-42c9-4d30-8ec5-3a5d97582cff", "availability_zone": "nova", "hostname": "jingh-test-1.novalocal", "launch_index": 0, "devices": [], "project_id": "ca17d50f6ac049928cc2fb2217dab93b", "name": "jingh-test-1"}
 ```
 
 从以上输出可见从metadata服务中我们获取了虚拟机的uuid、name、project id、availability_zone、hostname等。
@@ -483,4 +483,3 @@ UNIX Socket -> haproxy: metadata
 haproxy -> vm: metadata
 ```
 
-更多关于OpenStack的工作流图可参考[int32bit/openstack-workflow](https://github.com/int32bit/openstack-workflow):`https://github.com/int32bit/openstack-workflow`。
