@@ -1,6 +1,6 @@
 > Linuxer，Vimer，Pythoner，OpenStacker，Docker.
 
-Hey，我是Jingh，一个软件工程师。从事大数据和云计算相关工作， 主攻Openstack， 现就职于Sinobbd，负责Nova、Cinder以及Sahara相关工作。
+Hey，我是Jingh，一个软件工程师。现就职于国美云，从事大数据和云计算相关工作。
 
 Linuxer，Vimer，UNIX信徒,喜欢技术分享、讨论，专注于云计算、分布式、大数据相关技术,具有三年以上的Openstack开发运维经验。
 
