@@ -1,4 +1,4 @@
-> Linuxer，Vimer，Pythoner，OpenStacker，Docker.
+> Linuxer，Vimer，Pythonista，OpenStacker，Docker.
 
 Hey，我是Jingh，一个软件工程师。现就职于国美云，从事大数据和云计算相关工作。
 
